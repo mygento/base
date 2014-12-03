@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<config>
+    <tabs>
+        <allmygento translate="label">
+            <label><![CDATA[<div style="position: absolute;"><img id="mygento_block" src="" alt="" border="0" /></div>&nbsp;<script>
+            var n = SKIN_URL.indexOf("adminhtml");
+            $('mygento_block').src = SKIN_URL.substring(0, n) + "adminhtml/default/default/images/mygento/base/logo.png";
+            </script>]]></label>
+            <sort_order>400</sort_order>
+        </allmygento>
+    </tabs>
+    <sections>
+        <base module="base" translate="label">
+            <label>Extensions and Support</label>
+            <tab>allmygento</tab>
+            <sort_order>0</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <info translate="label">
+                    <label>Extensions information</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <support_information>
+                            <frontend_model>base/adminhtml_info</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </support_information>
+                    </fields>
+                </info>
+                <modules translate="label">
+                    <label>Installed Extensions</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <support_information>
+                            <frontend_model>base/adminhtml_modules</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </support_information>
+                    </fields>
+                </modules>
+            </groups>
+        </base>
+    </sections>
+</config>

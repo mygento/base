@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<config>
+    <modules>
+        <Mygento_Base>
+            <version>1.0.0</version>
+        </Mygento_Base>
+    </modules>
+    <global>
+        <helpers>
+            <base>
+                <class>Mygento_Base_Helper</class>
+            </base>
+        </helpers>
+        <blocks>
+            <base>
+                <class>Mygento_Base_Block</class>
+            </base>
+        </blocks>
+    </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <base>
+                    <files>
+                        <default>Mygento_Base.csv</default>
+                    </files>
+                </base>
+            </modules>
+        </translate>
+    </adminhtml>
+    <frontend>
+        <translate>
+            <modules>
+                <base>
+                    <files>
+                        <default>Mygento_Base.csv</default>
+                    </files>
+                </base>
+            </modules>
+        </translate>
+    </frontend>
+</config>
