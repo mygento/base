@@ -1,5 +1,12 @@
 <?php
 
+/**
+ *
+ *
+ * @category Mygento
+ * @package Mygento_Retail
+ * @copyright Copyright © 2014 NKS LLC. (http://www.mygento.ru)
+ */
 class Mygento_Base_Block_Adminhtml_Modules extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface {
 
     public function render(Varien_Data_Form_Element_Abstract $element) {
