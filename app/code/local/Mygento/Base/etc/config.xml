@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright (c) Mygento.ru
+ * Copyright © 2015 NKS LLC. (http://www.mygento.ru)
  * Public license URL: http://www.mygento.ru/oferta
  * Support EMAIL support@mygento.ru
  */
@@ -9,7 +9,7 @@
 <config>
     <modules>
         <Mygento_Base>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </Mygento_Base>
     </modules>
     <global>
@@ -25,6 +25,28 @@
         </blocks>
     </global>
     <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <base>
+                                            <title>Mygento - Extensions Information</title>
+                                        </base>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
         <translate>
             <modules>
                 <base>
