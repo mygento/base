@@ -19,7 +19,7 @@ class Mygento_Base_Block_Adminhtml_Info extends Mage_Adminhtml_Block_Abstract im
             $site='http://www.mygento.net';
             $email='connect@mygento.net';
         }
-        $ticket_url="http://team.mygento.net";
+        $ticket_url="http://team.mygento.net/index.php?path_info=tasks/submit/moduli-podderzka";
 
         $html='<style>'
                 .'#mygento_info{width:600px;}'
