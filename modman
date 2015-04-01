@@ -1,0 +1,4 @@
+app/code/local/Mygento/Base app/code/local/Mygento/Base
+app/etc/modules/Mygento_Base.xml app/etc/modules/Mygento_Base.xml
+app/locale/ru_RU/Mygento_Base.csv app/locale/ru_RU/Mygento_Base.csv
+skin/adminhtml/default/default/images/mygento/base/logo.png skin/adminhtml/default/default/images/mygento/base/logo.png
