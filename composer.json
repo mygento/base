@@ -10,11 +10,12 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*",
         "magento-ecg/coding-standard": "dev-master",
+        "mygento/coding-standard": "*",
         "sebastian/phpdcd": "*",
         "sebastian/phpcpd": "*",
         "jakub-onderka/php-parallel-lint": "0.*",
         "jakub-onderka/php-console-highlighter": "0.*",
-        "phpmd/phpmd": "@stable"
+        "phpmd/phpmd" : "@stable"
     },
     "repositories": [
         {

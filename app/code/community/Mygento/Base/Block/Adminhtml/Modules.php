@@ -5,11 +5,18 @@
  *
  * @category Mygento
  * @package Mygento_Base
- * @copyright Copyright © 2014 NKS LLC. (http://www.mygento.ru)
+ * @copyright Copyright © 2015 NKS LLC. (http://www.mygento.ru)
  */
 class Mygento_Base_Block_Adminhtml_Modules extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface
 {
 
+    /**
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     *
+     * @SuppressWarnings("unused")
+     */
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
 
@@ -24,12 +31,11 @@ class Mygento_Base_Block_Adminhtml_Modules extends Mage_Adminhtml_Block_Abstract
                 continue;
             }
             if (strpos($moduleName, 'Mygento_') !== false) {
-                $html.=$moduleName.' ('.Mage::getConfig()->getModuleConfig($moduleName)->version.')<br/>';
+                $html.=$moduleName . ' (' . Mage::getConfig()->getModuleConfig($moduleName)->version . ')<br/>';
             }
         }
 
 
         return $html;
     }
-
 }

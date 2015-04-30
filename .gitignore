@@ -1,0 +1,10 @@
+.DS_Store
+/magento.py
+/vendor/
+/app/code/community/EcomDev/
+/lib/EcomDev
+/lib/Spyc
+/lib/vfsStream
+/shell/ecomdev-phpunit.php
+/app/etc/modules/EcomDev_PHPUnit.xml
+/app/etc/modules/EcomDev_PHPUnitTest.xml
