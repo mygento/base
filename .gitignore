@@ -1,6 +1,11 @@
 .DS_Store
 /magento.py
+/magento.rb
 /vendor/
+/node_modules
+composer.lock
+
+#unit testing
 /app/code/community/EcomDev/
 /lib/EcomDev
 /lib/Spyc

@@ -4,8 +4,15 @@
     "license": "Apache-2.0",
     "homepage": "https://github.com/mygento/base",
     "description": "Mygento base",
+    "authors":[
+        {
+            "name":"Mygento",
+            "email": "connect@mygento.net",
+            "homepage": "http://www.mygento.net/"
+        }
+    ],
     "require": {
-        "magento-hackathon/magento-composer-installer": "*"
+        "magento-hackathon/magento-composer-installer": "3.*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*",
@@ -24,6 +31,7 @@
         }
     ],
     "extra": {
-        "magento-root-dir": "."
+        "magento-root-dir": ".",
+	"with-bootstrap-patch": false
     }
 }
