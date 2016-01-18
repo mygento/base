@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 NKS LLC. (http://www.mygento.ru)
+ * Copyright © 2016 NKS LLC. (http://www.mygento.ru)
  * Public license URL: http://www.mygento.ru/oferta
  * Support EMAIL support@mygento.ru
  */
@@ -9,7 +9,7 @@
 <config>
     <modules>
         <Mygento_Base>
-            <version>1.0.5</version>
+            <version>1.0.6</version>
         </Mygento_Base>
     </modules>
     <global>
