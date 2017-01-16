@@ -30,22 +30,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /** @var \Magento\Directory\Helper\Data */
     protected $_directoryHelper;
 
+    /** @var \Magento\Framework\HTTP\Client\Curl */
+    protected $curlClient;
+
     /**
+     *
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Mygento\Base\Model\Logger\LoggerFactory $logger
-     * @param \Mygento\Base\Model\Logger\HandlerFactory $handler
+     * @param \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory
+     * @param \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory
      * @param \Magento\Framework\Encryption\Encryptor $encryptor
+     * @param \Magento\Framework\HTTP\Client\Curl $curl
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,
         \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory,
-        \Magento\Framework\Encryption\Encryptor $encryptor
+        \Magento\Framework\Encryption\Encryptor $encryptor,
+        \Magento\Framework\HTTP\Client\Curl $curl
     ) {
         parent::__construct($context);
         $this->_loggerFactory = $loggerFactory;
         $this->_handlerFactory = $handlerFactory;
         $this->_encryptor = $encryptor;
+        $this->_curlClient = $curl;
         
         $this->logger = $this->_loggerFactory->create(['name' => $this->code]);
         $handler = $this->_handlerFactory->create(['name' => $this->code]);
@@ -69,5 +76,56 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function decrypt($path)
     {
         return $this->_encryptor->decrypt($path);
+    }
+
+    public function getConfig($config_path)
+    {
+        return $this->scopeConfig->getValue($config_path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
+    public function requestApiGet($url, $data, $headers = [])
+    {
+        // @codingStandardsIgnoreStart
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url . "?" . http_build_query($data));
+        curl_setopt($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        foreach ($headers as $header) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [$header]);
+        }
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+        // @codingStandardsIgnoreEnd
+        $this->addLog($result, true);
+        return $result;
+    }
+
+    public function requestApiPost($url, $data, $headers = [])
+    {
+        // @codingStandardsIgnoreStart
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        foreach ($headers as $header) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [$header]);
+        }
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+        // @codingStandardsIgnoreEnd
+        $this->addLog($result, true);
+        return $result;
+    }
+
+    public function normalizePhone($phone)
+    {
+        return preg_replace('/\s+/', '', str_replace(['(',')','-', ' '], '', trim($phone)));
     }
 }

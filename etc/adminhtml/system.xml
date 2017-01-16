@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Mygento Team
+ * @copyright Copyright 2017 Mygento (https://www.mygento.ru)
+ * @package Mygento_Base
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="mygento" translate="label" sortOrder="999999" class="mygento-tab">
+            <label>Mygento Extensions</label>
+        </tab>
+    </system>
+</config>
