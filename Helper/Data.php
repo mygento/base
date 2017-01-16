@@ -12,46 +12,55 @@ namespace Mygento\Base\Helper;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
-    /** @var \Psr\Log\LoggerInterface */
+    /** @var \Mygento\Base\Model\Logger\LoggerFactory */
+    protected $_loggerFactory;
+
+    /** @var \Mygento\Base\Model\Logger\Logger */
     protected $_logger;
 
-    /**
-     * @var \Magento\Framework\Encryption\Encryptor
-     */
+    /** @var \Mygento\Base\Model\Logger\HandlerFactory */
+    protected $_handlerFactory;
+
+    /** @var \Magento\Framework\Encryption\Encrypto */
     protected $_encryptor;
 
-    /**
-     *
-     * @var \Magento\Directory\Helper\Data
-     */
+    /** @var string */
+    protected $code = 'mygento';
+
+    /** @var \Magento\Directory\Helper\Data */
     protected $_directoryHelper;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param \Mygento\Base\Model\Logger\LoggerFactory $logger
+     * @param \Mygento\Base\Model\Logger\HandlerFactory $handler
+     * @param \Magento\Framework\Encryption\Encryptor $encryptor
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Mygento\Base\Model\Logger\Logger $logger,
+        \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,
+        \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory,
         \Magento\Framework\Encryption\Encryptor $encryptor
     ) {
         parent::__construct($context);
-        $this->_logger = $logger;
+        $this->_loggerFactory = $loggerFactory;
+        $this->_handlerFactory = $handlerFactory;
         $this->_encryptor = $encryptor;
+        
+        $this->logger = $this->_loggerFactory->create(['name' => $this->code]);
+        $handler = $this->_handlerFactory->create(['name' => $this->code]);
+        $this->logger->setHandlers([$handler]);
     }
 
     public function addLog($text, $isArray = false)
     {
-        if (!$this->getConfig('debug')) {
-            return;
-        }
         if ($isArray) {
             // @codingStandardsIgnoreStart
-            $this->_logger->log('DEBUG', print_r($text, true));
+            $text = print_r($text, true);
             // @codingStandardsIgnoreEnd
-            return;
         }
-        $this->_logger->log('DEBUG', $text);
+        
+        $this->logger->log('DEBUG', $text);
     }
 
     /**
