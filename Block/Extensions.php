@@ -140,7 +140,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
 
         $currentVer = $module['version'];
         $moduleName = $module['description'];
-        $status = 'status';
+        $status = '<span class="mygento-icon-success"></span>';
 
         // in case if module output disabled
         if ($this->_scopeConfig->getValue('advanced/modules_disable_output/' . $moduleCode)) {

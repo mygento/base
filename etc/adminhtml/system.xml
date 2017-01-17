@@ -12,7 +12,7 @@
             <label>Mygento Extensions</label>
         </tab>
         <section id="mygento_base" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label><![CDATA[Extensions &amp; Notifications]]></label>
+            <label>Mygento Base</label>
             <tab>mygento</tab>
             <resource>Mygento_Base::config</resource>
             <group id="extensions" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">

@@ -1,3 +1,27 @@
 .mygento-logo {
     display: block;
 }
+
+.mygento-icon-success::before,
+.mygento-icon-update::before {
+    font-family: 'Admin Icons';
+    font-size: 1.9rem;
+    line-height: 1;
+    vertical-align: middle;
+    display: inline-block;
+    font-weight: normal;
+    overflow: hidden;
+    speak: none;
+    text-align: center;
+}
+
+.mygento-icon-success::before {
+    color: #79a22e;
+    content: '\e62d';
+}
+
+.mygento-icon-update::before {
+    content: '\e614';
+    color: #79a22e;
+    font-size: 2.2rem;
+}
