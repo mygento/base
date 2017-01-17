@@ -1,7 +1,8 @@
 <?php
 /**
- * Copyright 2017 Mygento. All rights reserved.
- * See COPYING.txt for license details.
+ * @author Mygento
+ * @copyright See COPYING.txt for license details.
+ * @package Mygento_Base
  */
 
 namespace Mygento\Base\Model\Logger;
