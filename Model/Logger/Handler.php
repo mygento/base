@@ -10,6 +10,12 @@ namespace Mygento\Base\Model\Logger;
 class Handler extends \Magento\Framework\Logger\Handler\Base
 {
 
+    /**
+     *
+     * @param type $name
+     * @param \Magento\Framework\Filesystem\DriverInterface $filesystem
+     * @param type $filePath
+     */
     public function __construct(
         $name,
         \Magento\Framework\Filesystem\DriverInterface $filesystem,

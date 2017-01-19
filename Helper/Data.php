@@ -60,6 +60,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->logger->setHandlers([$handler]);
     }
 
+    /**
+     *
+     * @param type $text
+     * @param type $isArray
+     */
     public function addLog($text, $isArray = false)
     {
         if ($isArray) {
@@ -79,12 +84,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_encryptor->decrypt($path);
     }
 
-    public function getConfig($config_path)
+    /**
+     *
+     * @param type $config_path
+     * @return type
+     */
+    public function getConfig($configPath)
     {
-        return $this->scopeConfig->getValue($config_path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            $configPath,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
+    /**
+     *
+     * @param type $url
+     * @param type $data
+     * @param type $headers
+     * @return type
+     */
     public function requestApiGet($url, $data, $headers = [])
     {
         // @codingStandardsIgnoreStart
@@ -105,6 +124,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $result;
     }
 
+    /**
+     *
+     * @param type $url
+     * @param type $data
+     * @param type $headers
+     * @return type
+     */
     public function requestApiPost($url, $data, $headers = [])
     {
         // @codingStandardsIgnoreStart
@@ -126,6 +152,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $result;
     }
 
+    /**
+     *
+     * @param type $phone
+     * @return type
+     */
     public function normalizePhone($phone)
     {
         return preg_replace('/\s+/', '', str_replace(['(', ')', '-', ' '], '', trim($phone)));

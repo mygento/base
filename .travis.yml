@@ -14,9 +14,9 @@ before_script:
 - php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
 script:
 - php vendor/bin/parallel-lint --exclude vendor .
-- php vendor/bin/phpcs --standard=vendor/mygento/coding-standard/Mygento-Mage2,PSR2 .
+- php vendor/bin/phpcs --standard=vendor/mygento/coding-standard/Mygento-Mage2 .
 - php vendor/bin/phpmd . text cleancode,codesize,controversial,design,naming,unusedcode vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml --exclude vendor
 env:
   global:
-  - secure: GBljIgKWStACph86wssa701MMQq7xzxq8z7LIfmtcXbBv9v7N6O84QIskkSsw3g1Y90orvw2+LWnL4OAfJqoKdGrAQYOi7w/sPyVCa2examddD7MFkB3afJHfWjRIRmCAG5a+VnDfGyoFsul7SAlrFmAmf/7g6QgznUQDeUo3iE=
-  - secure: eRqHrd+pVvu0cT1lZLGLzXNzvbgOdB668lFQB4Q843BN/akKGTaDBzgeNgtz3TSaSENdZwfkdHmeORJO7M5JJ/DEpFzEvv5orN0KZaHq0vhBrMMkuvvdQ55kYbbOvxp3rurt2GOZXQcgCiv4VqaDm9PTpk2dy9w0xW7Qf1Fzq9E=
+  - secure: aZScsjI1aA3iOEDUMGMgt2e3Jal/l4WolOWfNyf7Uh3pZJxJPkeZDEizZ5FWpztA9i4jmOzaU9XexKwBRCi/Ehrgo7mw6YDqzIDreRu/CsMRm3FKMdW8eHTnb3GEAhgsTJIFhqvZA0GLO9lUCgvAYW/vk3yTVnttbgcM6J/cR8Y=
+  - secure: Rov0H13u42jRA/wmWWghmGIwtcyv5YTHHd8Buvq3PvfxA7wvLqouN7QHYFK1lV/RvBXTLoBboszEZSwxvlrp6Od6RK7yxKcFzmKIJptg0AxmICAZNgdr5nXvbbWvwnIlR5fCsyd6DvGnwBJ2Gk8nx35hl90e5nAa0WlspE3/Wfo=

@@ -15,30 +15,51 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @var \Magento\Framework\Module\ModuleListInterface
      */
     protected $_moduleList;
+    
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $_layoutFactory;
+    
     /**
      * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
+    
     /**
      * @var DecoderInterface
      */
     protected $_jsonDecoder;
+    
     /**
      * @var \Magento\Framework\Filesystem\Driver\File
      */
     protected $_filesystem;
+    
     /**
      * @var \Mygento\Base\Helper\Module
      */
     protected $_moduleHelper;
 
-    /**@var \Magento\Store\Api\Data\StoreInterface * */
+    /**
+     * @var \Magento\Store\Api\Data\StoreInterface
+     */
     protected $_store;
 
+    /**
+     *
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Framework\View\Helper\Js $jsHelper
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\Filesystem\Driver\File $filesystem
+     * @param \Mygento\Base\Helper\Module $moduleHelper
+     * @param \Magento\Store\Api\Data\StoreInterface $store
+     * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
+     * @param array $data
+     */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
@@ -74,7 +95,6 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         $html = $this->_getHeaderHtml($element);
 
-
         $modules = $this->_moduleList->getNames();
 
         $dispatchResult = new \Magento\Framework\DataObject($modules);
@@ -99,17 +119,25 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             $email = 'connect@mygento.net';
         }
 
-        $ticket_url = "mailto:support@mygento.ru";
+        $ticketUrl = "mailto:support@mygento.ru";
 
         $html .= '<table id="mygento_info" cellspacing="0" cellpading="0"><tr class="line">';
-        $html .= '<tr><td>' . __('Support') . ':</td><td>' . __('Purchased extensions support is available through <a href="%s" target="_blank">ticket tracking system</a>',
-                $ticket_url) . '.<br/><br/>' . __('Please report all bugs and feature requests.') . '<br/><br/>' . __('If for some reasons you can not submit ticket to our system, you can write us an email %s.',
-                $email) . '</td></tr>';
+        $html .= '<tr><td>' . __('Support') . ':</td>'.'<td>' . __(
+            'Purchased extensions support is available through <a href="%s" target="_blank">ticket tracking system</a>',
+            $ticketUrl
+        ) . '.<br/><br/>' . __('Please report all bugs and feature requests.') . '<br/><br/>' . __(
+            'If for some reasons you can not submit ticket to our system, you can write us an email %s.',
+            $email
+        ) . '</td></tr>';
         $html .= '<tr><td>' . __('License') . ':</td><td>' . __('Tender offer can be checked <a 
         href="http://www.mygento.ru/oferta" target="_blank">here</a>') . '</td></tr>';
-        $html .= '<tr class="line"><td><img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/></td><td>' . __('You can hire us for any Magento extension customization and development.<br/>Write us to %s',
-                $email) . '<br/><br/>' . __('You can check all providable services on <a href="%s" target="_blank">our website</a>.',
-                $site . '/services') . '</td></tr>';
+        $html .= '<tr class="line"><td><img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/></td><td>' . __(
+            'You can hire us for any Magento extension customization and development.<br/>Write us to %s',
+            $email
+        ) . '<br/><br/>' . __(
+            'You can check all providable services on <a href="%s" target="_blank">our website</a>.',
+            $site . '/services'
+        ) . '</td></tr>';
         $html .= '</table>';
 
         $html .= $this->_getFooterHtml($element);
@@ -177,11 +205,11 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
 
         $moduleName = $status . ' ' . $moduleName;
 
-        $field = $fieldset->addField($moduleCode, 'label', array(
+        $field = $fieldset->addField($moduleCode, 'label', [
             'name' => 'dummy',
             'label' => $moduleName,
             'value' => $currentVer,
-        ))->setRenderer($this->_getFieldRenderer());
+        ])->setRenderer($this->_getFieldRenderer());
 
         return $field->toHtml();
     }

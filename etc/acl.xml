@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Mygento Team
- * @copyright Copyright 2017 Mygento (https://www.mygento.ru)
+ * @copyright See COPYING.txt for license details.
  * @package Mygento_Base
  */
 -->
@@ -14,8 +14,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Mygento_Base::config" title="Mygento - Extensions Information"
-                                      sortOrder="100"/>
+                            <resource id="Mygento_Base::config" title="Mygento - Extensions Information" sortOrder="100"/>
                         </resource>
                     </resource>
                 </resource>
