@@ -13,35 +13,27 @@ namespace Mygento\Base\Helper;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
-    /** @var \Mygento\Base\Model\Logger\LoggerFactory */
+    /* @var \Mygento\Base\Model\Logger\LoggerFactory */
     protected $_loggerFactory;
 
-    /** @var \Mygento\Base\Model\Logger\Logger */
+    /* @var \Mygento\Base\Model\Logger\Logger */
     protected $_logger;
 
-    /** @var \Mygento\Base\Model\Logger\HandlerFactory */
+    /* @var \Mygento\Base\Model\Logger\HandlerFactory */
     protected $_handlerFactory;
 
-    /** @var \Magento\Framework\Encryption\Encrypto */
+    /* @var \Magento\Framework\Encryption\Encrypto */
     protected $_encryptor;
 
-    /** @var string */
+    /* @var string */
     protected $code = 'mygento';
 
-    /** @var \Magento\Directory\Helper\Data */
+    /* @var \Magento\Directory\Helper\Data */
     protected $_directoryHelper;
 
-    /** @var \Magento\Framework\HTTP\Client\Curl */
+    /* @var \Magento\Framework\HTTP\Client\Curl */
     protected $curlClient;
 
-    /**
-     *
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory
-     * @param \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory
-     * @param \Magento\Framework\Encryption\Encryptor $encryptor
-     * @param \Magento\Framework\HTTP\Client\Curl $curl
-     */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,

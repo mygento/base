@@ -120,24 +120,37 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         }
 
         $ticketUrl = "mailto:support@mygento.ru";
+        $url = __(
+            'Purchased extensions support is available through '
+            . '<a href="%s" target="_blank">ticket tracking system</a>',
+            $ticketUrl
+        );
+        $bugs = __('Please report all bugs and feature requests.') ;
+        $emailtext = __(
+            'If for some reasons you can not submit ticket '
+            . 'to our system, you can write us an email %s.',
+            $email
+        );
+        $hiretext = __(
+            'You can hire us for any Magento extension customization and development.'
+            . '<br/>Write us to %s',
+            $email
+        );
+        $tender = __('Tender offer can be checked '
+            . '<a href="http://www.mygento.ru/oferta" target="_blank">here</a>') ;
 
         $html .= '<table id="mygento_info" cellspacing="0" cellpading="0"><tr class="line">';
-        $html .= '<tr><td>' . __('Support') . ':</td>'.'<td>' . __(
-            'Purchased extensions support is available through <a href="%s" target="_blank">ticket tracking system</a>',
-            $ticketUrl
-        ) . '.<br/><br/>' . __('Please report all bugs and feature requests.') . '<br/><br/>' . __(
-            'If for some reasons you can not submit ticket to our system, you can write us an email %s.',
-            $email
-        ) . '</td></tr>';
-        $html .= '<tr><td>' . __('License') . ':</td><td>' . __('Tender offer can be checked <a 
-        href="http://www.mygento.ru/oferta" target="_blank">here</a>') . '</td></tr>';
-        $html .= '<tr class="line"><td><img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/></td><td>' . __(
-            'You can hire us for any Magento extension customization and development.<br/>Write us to %s',
-            $email
-        ) . '<br/><br/>' . __(
-            'You can check all providable services on <a href="%s" target="_blank">our website</a>.',
-            $site . '/services'
-        ) . '</td></tr>';
+        $html .= '<tr><td>' . __('Support') . ':</td>'.
+            '<td>' .$url . '.<br/><br/>' .$bugs .
+            '<br/><br/>' . $emailtext. '</td></tr>';
+        $html .= '<tr><td>' . __('License') . ':</td><td>' . $tender. '</td></tr>';
+        $html .= '<tr class="line"><td>'
+            . '<img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/>'
+            . '</td><td>' . $hiretext. '<br/><br/>' . __(
+                'You can check all providable services on '
+                . '<a href="%s" target="_blank">our website</a>.',
+                $site . '/services'
+            ) . '</td></tr>';
         $html .= '</table>';
 
         $html .= $this->_getFooterHtml($element);

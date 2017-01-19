@@ -4,15 +4,15 @@
 
 .mygento-icon-success::before,
 .mygento-icon-update::before {
+    display: inline-block;
     font-family: 'Admin Icons';
     font-size: 1.9rem;
-    line-height: 1;
-    vertical-align: middle;
-    display: inline-block;
     font-weight: normal;
+    line-height: 1;
     overflow: hidden;
     speak: none;
     text-align: center;
+    vertical-align: middle;
 }
 
 .mygento-icon-success::before {
@@ -21,8 +21,8 @@
 }
 
 .mygento-icon-update::before {
-    content: '\e614';
     color: #79a22e;
+    content: '\e614';
     font-size: 2.2rem;
 }
 
@@ -31,13 +31,13 @@
 }
 
 #mygento_info tr {
-    padding-bottom: 15px;
     display: block;
+    padding-bottom: 15px;
 }
 
 #mygento_info td:nth-child(1) {
-    width: 150px;
     font-weight: bold;
+    width: 150px;
 }
 
 #mygento_info td:nth-child(2) {
