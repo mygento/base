@@ -12,5 +12,5 @@ namespace Mygento\Base\Helper;
  */
 class Module extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    
+
 }

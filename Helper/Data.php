@@ -54,7 +54,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_handlerFactory = $handlerFactory;
         $this->_encryptor = $encryptor;
         $this->_curlClient = $curl;
-        
+
         $this->logger = $this->_loggerFactory->create(['name' => $this->code]);
         $handler = $this->_handlerFactory->create(['name' => $this->code]);
         $this->logger->setHandlers([$handler]);
@@ -67,7 +67,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $text = print_r($text, true);
             // @codingStandardsIgnoreEnd
         }
-        
+
         $this->logger->log('DEBUG', $text);
     }
 
@@ -81,7 +81,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getConfig($config_path)
     {
-        return $this->scopeConfig->getValue($config_path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue($config_path,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function requestApiGet($url, $data, $headers = [])
@@ -127,6 +128,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function normalizePhone($phone)
     {
-        return preg_replace('/\s+/', '', str_replace(['(',')','-', ' '], '', trim($phone)));
+        return preg_replace('/\s+/', '', str_replace(['(', ')', '-', ' '], '', trim($phone)));
     }
 }

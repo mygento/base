@@ -36,6 +36,9 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
      */
     protected $_moduleHelper;
 
+    /**@var \Magento\Store\Api\Data\StoreInterface * */
+    protected $_store;
+
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
@@ -45,18 +48,20 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         \Magento\Framework\Module\Dir\Reader $moduleReader,
         \Magento\Framework\Filesystem\Driver\File $filesystem,
         \Mygento\Base\Helper\Module $moduleHelper,
+        \Magento\Store\Api\Data\StoreInterface $store,
         \Magento\Framework\Json\DecoderInterface $jsonDecoder,
         array $data = []
     ) {
         parent::__construct($context, $authSession, $jsHelper, $data);
 
-        $this->_moduleList    = $moduleList;
+        $this->_moduleList = $moduleList;
         $this->_layoutFactory = $layoutFactory;
-        $this->_moduleReader  = $moduleReader;
-        $this->_jsonDecoder   = $jsonDecoder;
-        $this->_filesystem    = $filesystem;
-        $this->_moduleHelper  = $moduleHelper;
-        $this->_scopeConfig   = $context->getScopeConfig();
+        $this->_moduleReader = $moduleReader;
+        $this->_jsonDecoder = $jsonDecoder;
+        $this->_filesystem = $filesystem;
+        $this->_moduleHelper = $moduleHelper;
+        $this->_store = $store;
+        $this->_scopeConfig = $context->getScopeConfig();
     }
 
     /**
@@ -68,6 +73,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     public function render(AbstractElement $element)
     {
         $html = $this->_getHeaderHtml($element);
+
 
         $modules = $this->_moduleList->getNames();
 
@@ -84,6 +90,27 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
 
             $html .= $this->_getFieldHtml($element, $moduleName);
         }
+
+        if ($this->_store->getLocaleCode() == 'ru_RU') {
+            $site = 'https://www.mygento.ru';
+            $email = 'connect@mygento.ru';
+        } else {
+            $site = 'https://www.mygento.net';
+            $email = 'connect@mygento.net';
+        }
+
+        $ticket_url = "mailto:support@mygento.ru";
+
+        $html .= '<table id="mygento_info" cellspacing="0" cellpading="0"><tr class="line">';
+        $html .= '<tr><td>' . __('Support') . ':</td><td>' . __('Purchased extensions support is available through <a href="%s" target="_blank">ticket tracking system</a>',
+                $ticket_url) . '.<br/><br/>' . __('Please report all bugs and feature requests.') . '<br/><br/>' . __('If for some reasons you can not submit ticket to our system, you can write us an email %s.',
+                $email) . '</td></tr>';
+        $html .= '<tr><td>' . __('License') . ':</td><td>' . __('Tender offer can be checked <a 
+        href="http://www.mygento.ru/oferta" target="_blank">here</a>') . '</td></tr>';
+        $html .= '<tr class="line"><td><img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/></td><td>' . __('You can hire us for any Magento extension customization and development.<br/>Write us to %s',
+                $email) . '<br/><br/>' . __('You can check all providable services on <a href="%s" target="_blank">our website</a>.',
+                $site . '/services') . '</td></tr>';
+        $html .= '</table>';
 
         $html .= $this->_getFooterHtml($element);
 
@@ -114,8 +141,9 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
      */
     protected function _getModuleInfo($moduleCode)
     {
+        $DS = DIRECTORY_SEPARATOR;
         $dir = $this->_moduleReader->getModuleDir('', $moduleCode);
-        $file = $dir . '/composer.json';
+        $file = $dir . $DS . 'composer.json';
 
         $string = $this->_filesystem->fileGetContents($file);
         $json = $this->_jsonDecoder->decode($string);
@@ -131,9 +159,9 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     protected function _getFieldHtml($fieldset, $moduleCode)
     {
         $module = $this->_getModuleInfo($moduleCode);
-        if(!is_array($module)  ||
-           !array_key_exists('version', $module) ||
-           !array_key_exists('description', $module)
+        if (!is_array($module) ||
+            !array_key_exists('version', $module) ||
+            !array_key_exists('description', $module)
         ) {
             return '';
         }
@@ -150,7 +178,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         $moduleName = $status . ' ' . $moduleName;
 
         $field = $fieldset->addField($moduleCode, 'label', array(
-            'name'  => 'dummy',
+            'name' => 'dummy',
             'label' => $moduleName,
             'value' => $currentVer,
         ))->setRenderer($this->_getFieldRenderer());

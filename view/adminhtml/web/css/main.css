@@ -25,3 +25,26 @@
     color: #79a22e;
     font-size: 2.2rem;
 }
+
+#mygento_info {
+    width: 600px;
+}
+
+#mygento_info tr {
+    padding-bottom: 15px;
+    display: block;
+}
+
+#mygento_info td:nth-child(1) {
+    width: 150px;
+    font-weight: bold;
+}
+
+#mygento_info td:nth-child(2) {
+    width: 450px;
+}
+
+.line {
+    border-top: 1px solid #c6c6c6;
+    padding-top: 15px;
+}
