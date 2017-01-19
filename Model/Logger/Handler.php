@@ -21,8 +21,8 @@ class Handler extends \Magento\Framework\Logger\Handler\Base
         \Magento\Framework\Filesystem\DriverInterface $filesystem,
         $filePath = null
     ) {
-        $DS = DIRECTORY_SEPARATOR;
-        $this->fileName = $DS . 'var' . $DS . 'log' . $DS . $name . '.log';
+        $this->fileName = DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR .
+            'log' . DIRECTORY_SEPARATOR . $name . '.log';
         parent::__construct($filesystem, $filePath);
     }
 }

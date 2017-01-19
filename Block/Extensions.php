@@ -9,6 +9,9 @@ namespace Mygento\Base\Block;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
@@ -59,6 +62,8 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Store\Api\Data\StoreInterface $store
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
@@ -111,12 +116,12 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             $html .= $this->_getFieldHtml($element, $moduleName);
         }
 
+        $site = 'https://www.mygento.net';
+        $email = 'connect@mygento.net';
+
         if ($this->_store->getLocaleCode() == 'ru_RU') {
             $site = 'https://www.mygento.ru';
             $email = 'connect@mygento.ru';
-        } else {
-            $site = 'https://www.mygento.net';
-            $email = 'connect@mygento.net';
         }
 
         $ticketUrl = "mailto:support@mygento.ru";
@@ -182,9 +187,8 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
      */
     protected function _getModuleInfo($moduleCode)
     {
-        $DS = DIRECTORY_SEPARATOR;
         $dir = $this->_moduleReader->getModuleDir('', $moduleCode);
-        $file = $dir . $DS . 'composer.json';
+        $file = $dir . DIRECTORY_SEPARATOR . 'composer.json';
 
         $string = $this->_filesystem->fileGetContents($file);
         $json = $this->_jsonDecoder->decode($string);

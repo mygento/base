@@ -15,7 +15,7 @@ before_script:
 script:
 - php vendor/bin/parallel-lint --exclude vendor .
 - php vendor/bin/phpcs --standard=vendor/mygento/coding-standard/Mygento-Mage2 .
-- php vendor/bin/phpmd . text cleancode,codesize,controversial,design,naming,unusedcode vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml --exclude vendor
+- php vendor/bin/phpmd . text cleancode,codesize,design,naming,unusedcode vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml --exclude vendor
 env:
   global:
   - secure: aZScsjI1aA3iOEDUMGMgt2e3Jal/l4WolOWfNyf7Uh3pZJxJPkeZDEizZ5FWpztA9i4jmOzaU9XexKwBRCi/Ehrgo7mw6YDqzIDreRu/CsMRm3FKMdW8eHTnb3GEAhgsTJIFhqvZA0GLO9lUCgvAYW/vk3yTVnttbgcM6J/cR8Y=

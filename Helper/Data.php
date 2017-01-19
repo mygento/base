@@ -56,6 +56,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param type $text
      * @param type $isArray
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function addLog($text, $isArray = false)
     {
@@ -99,18 +100,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function requestApiGet($url, $data, $headers = [])
     {
         // @codingStandardsIgnoreStart
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url . "?" . http_build_query($data));
-        curl_setopt($ch, CURLOPT_POST, false);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $curlh = curl_init();
+        curl_setopt($curlh, CURLOPT_URL, $url . "?" . http_build_query($data));
+        curl_setopt($curlh, CURLOPT_POST, false);
+        curl_setopt($curlh, CURLOPT_HEADER, 0);
+        curl_setopt($curlh, CURLOPT_RETURNTRANSFER, true);
 
         foreach ($headers as $header) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [$header]);
+            curl_setopt($curlh, CURLOPT_HTTPHEADER, [$header]);
         }
 
-        $result = curl_exec($ch);
-        curl_close($ch);
+        $result = curl_exec($curlh);
+        curl_close($curlh);
         // @codingStandardsIgnoreEnd
         $this->addLog($result, true);
         return $result;
@@ -126,19 +127,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function requestApiPost($url, $data, $headers = [])
     {
         // @codingStandardsIgnoreStart
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $curlh = curl_init();
+        curl_setopt($curlh, CURLOPT_URL, $url);
+        curl_setopt($curlh, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($curlh, CURLOPT_POST, true);
+        curl_setopt($curlh, CURLOPT_HEADER, 0);
+        curl_setopt($curlh, CURLOPT_RETURNTRANSFER, true);
 
         foreach ($headers as $header) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [$header]);
+            curl_setopt($curlh, CURLOPT_HTTPHEADER, [$header]);
         }
 
-        $result = curl_exec($ch);
-        curl_close($ch);
+        $result = curl_exec($curlh);
+        curl_close($curlh);
         // @codingStandardsIgnoreEnd
         $this->addLog($result, true);
         return $result;
