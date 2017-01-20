@@ -2,6 +2,11 @@
     display: block;
 }
 
+.mygento-icon-success,
+.mygento-icon-update {
+    width: 50px;
+}
+
 .mygento-icon-success::before,
 .mygento-icon-update::before {
     display: inline-block;
@@ -26,25 +31,33 @@
     font-size: 2.2rem;
 }
 
-#mygento_info {
-    width: 600px;
-}
-
-#mygento_info tr {
+.mygento_info tr {
     display: block;
     padding-bottom: 15px;
 }
 
-#mygento_info td:nth-child(1) {
+.mygento_info td:nth-child(1) {
     font-weight: bold;
     width: 150px;
 }
 
-#mygento_info td:nth-child(2) {
+.mygento_info td:nth-child(2) {
     width: 450px;
 }
 
-.line {
+.mygento_info_line {
     border-top: 1px solid #c6c6c6;
     padding-top: 15px;
+}
+
+.mygento-mod-list {
+    list-style: none;
+}
+
+.mygento-mod-list li {
+    display: flex;
+}
+
+.mygento-mod-list label {
+    width: 400px;
 }

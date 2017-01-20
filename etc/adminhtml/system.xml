@@ -16,7 +16,7 @@
             <tab>mygento</tab>
             <resource>Mygento_Base::config</resource>
             <group id="extensions" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Installed Extensions</label>
+                <label>Extensions and Support</label>
                 <frontend_model>Mygento\Base\Block\Extensions</frontend_model>
             </group>
         </section>

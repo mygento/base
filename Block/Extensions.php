@@ -18,27 +18,27 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @var \Magento\Framework\Module\ModuleListInterface
      */
     protected $_moduleList;
-    
+
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $_layoutFactory;
-    
+
     /**
      * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
-    
+
     /**
      * @var DecoderInterface
      */
     protected $_jsonDecoder;
-    
+
     /**
      * @var \Magento\Framework\Filesystem\Driver\File
      */
     protected $_filesystem;
-    
+
     /**
      * @var \Mygento\Base\Helper\Module
      */
@@ -100,22 +100,6 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         $html = $this->_getHeaderHtml($element);
 
-        $modules = $this->_moduleList->getNames();
-
-        $dispatchResult = new \Magento\Framework\DataObject($modules);
-        $modules = $dispatchResult->toArray();
-
-        sort($modules);
-        foreach ($modules as $moduleName) {
-            if (strstr($moduleName, 'Mygento_') === false
-                || $moduleName === 'Mygento_Base'
-            ) {
-                continue;
-            }
-
-            $html .= $this->_getFieldHtml($element, $moduleName);
-        }
-
         $site = 'https://www.mygento.net';
         $email = 'connect@mygento.net';
 
@@ -127,36 +111,55 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         $ticketUrl = "mailto:support@mygento.ru";
         $url = __(
             'Purchased extensions support is available through '
-            . '<a href="%s" target="_blank">ticket tracking system</a>',
+            . '<a href="%1" target="_blank">ticket tracking system</a>',
             $ticketUrl
         );
         $bugs = __('Please report all bugs and feature requests.') ;
         $emailtext = __(
             'If for some reasons you can not submit ticket '
-            . 'to our system, you can write us an email %s.',
+            . 'to our system, you can write us an email %1.',
             $email
         );
         $hiretext = __(
             'You can hire us for any Magento extension customization and development.'
-            . '<br/>Write us to %s',
+            . '<br/>Write us to %1',
             $email
         );
         $tender = __('Tender offer can be checked '
             . '<a href="http://www.mygento.ru/oferta" target="_blank">here</a>') ;
 
-        $html .= '<table id="mygento_info" cellspacing="0" cellpading="0"><tr class="line">';
+        $html .= '<table class="mygento_info" cellspacing="0" cellpading="0"><tr class="mygento_info_line">';
         $html .= '<tr><td>' . __('Support') . ':</td>'.
             '<td>' .$url . '.<br/><br/>' .$bugs .
             '<br/><br/>' . $emailtext. '</td></tr>';
         $html .= '<tr><td>' . __('License') . ':</td><td>' . $tender. '</td></tr>';
-        $html .= '<tr class="line"><td>'
+        $html .= '<tr class="mygento_info_line "><td>'
             . '<img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/>'
             . '</td><td>' . $hiretext. '<br/><br/>' . __(
                 'You can check all providable services on '
-                . '<a href="%s" target="_blank">our website</a>.',
+                . '<a href="%1" target="_blank">our website</a>.',
                 $site . '/services'
-            ) . '</td></tr>';
+            ) . '</td></tr><tr class="mygento_info_line"></tr>';
         $html .= '</table>';
+
+        $modules = $this->_moduleList->getNames();
+
+        $dispatchResult = new \Magento\Framework\DataObject($modules);
+        $modules = $dispatchResult->toArray();
+
+        $html .= '<ul class="mygento-mod-list">';
+        sort($modules);
+        foreach ($modules as $moduleName) {
+            if (strstr($moduleName, 'Mygento_') === false
+                || $moduleName === 'Mygento_Base'
+            ) {
+                continue;
+            }
+
+            $html .= $this->_getFieldHtml($element, $moduleName);
+        }
+        $html .= '</ul>';
+
 
         $html .= $this->_getFooterHtml($element);
 
@@ -217,10 +220,8 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
 
         // in case if module output disabled
         if ($this->_scopeConfig->getValue('advanced/modules_disable_output/' . $moduleCode)) {
-            $status = __("Output disabled");
+            $status = __('Output disabled');
         }
-
-        $moduleName = $status . ' ' . $moduleName;
 
         $field = $fieldset->addField($moduleCode, 'label', [
             'name' => 'dummy',
@@ -228,6 +229,6 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             'value' => $currentVer,
         ])->setRenderer($this->_getFieldRenderer());
 
-        return $field->toHtml();
+        return '<li>'.$status.$field->toHtml().'</li>';
     }
 }
