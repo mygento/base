@@ -128,18 +128,19 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         $tender = __('Tender offer can be checked '
             . '<a href="http://www.mygento.ru/oferta" target="_blank">here</a>') ;
 
-        $html .= '<table class="mygento_info" cellspacing="0" cellpading="0"><tr class="mygento_info_line">';
+        $html .= '<table class="mygento-info" cellspacing="0" cellpading="0">'
+            . '<tr class="mygento-info-line">';
         $html .= '<tr><td>' . __('Support') . ':</td>'.
             '<td>' .$url . '.<br/><br/>' .$bugs .
             '<br/><br/>' . $emailtext. '</td></tr>';
         $html .= '<tr><td>' . __('License') . ':</td><td>' . $tender. '</td></tr>';
-        $html .= '<tr class="mygento_info_line "><td>'
+        $html .= '<tr class="mygento-info-line "><td>'
             . '<img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/>'
             . '</td><td>' . $hiretext. '<br/><br/>' . __(
                 'You can check all providable services on '
                 . '<a href="%1" target="_blank">our website</a>.',
                 $site . '/services'
-            ) . '</td></tr><tr class="mygento_info_line"></tr>';
+            ) . '</td></tr><tr class="mygento-info-line"></tr>';
         $html .= '</table>';
 
         $modules = $this->_moduleList->getNames();
@@ -147,6 +148,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         $dispatchResult = new \Magento\Framework\DataObject($modules);
         $modules = $dispatchResult->toArray();
 
+        $html .= '<h2>'.__('Installed Extensions').'</h2>';
         $html .= '<ul class="mygento-mod-list">';
         sort($modules);
         foreach ($modules as $moduleName) {
@@ -159,7 +161,6 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             $html .= $this->_getFieldHtml($element, $moduleName);
         }
         $html .= '</ul>';
-
 
         $html .= $this->_getFooterHtml($element);
 
