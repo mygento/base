@@ -1,0 +1,63 @@
+.mygento-logo {
+    display: block;
+}
+
+.mygento-icon-success,
+.mygento-icon-update {
+    width: 50px;
+}
+
+.mygento-icon-success::before,
+.mygento-icon-update::before {
+    display: inline-block;
+    font-family: 'Admin Icons';
+    font-size: 1.9rem;
+    font-weight: normal;
+    line-height: 1;
+    overflow: hidden;
+    speak: none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.mygento-icon-success::before {
+    color: #79a22e;
+    content: '\e62d';
+}
+
+.mygento-icon-update::before {
+    color: #79a22e;
+    content: '\e614';
+    font-size: 2.2rem;
+}
+
+.mygento-info tr {
+    display: block;
+    padding-bottom: 15px;
+}
+
+.mygento-info td:nth-child(1) {
+    font-weight: bold;
+    width: 150px;
+}
+
+.mygento-info td:nth-child(2) {
+    width: 450px;
+}
+
+.mygento-info-line {
+    border-top: 1px solid #c6c6c6;
+    padding-top: 15px;
+}
+
+.mygento-mod-list {
+    list-style: none;
+}
+
+.mygento-mod-list li {
+    display: flex;
+}
+
+.mygento-mod-list label {
+    width: 400px;
+}
