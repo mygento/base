@@ -26,13 +26,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_encryptor;
 
     /* @var string */
-    protected $code = 'mygento';
+    protected $_code = 'mygento';
 
     /* @var \Magento\Directory\Helper\Data */
     protected $_directoryHelper;
 
     /* @var \Magento\Framework\HTTP\Client\Curl */
-    protected $curlClient;
+    protected $_curlClient;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -47,9 +47,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_encryptor = $encryptor;
         $this->_curlClient = $curl;
 
-        $this->logger = $this->_loggerFactory->create(['name' => $this->code]);
-        $handler = $this->_handlerFactory->create(['name' => $this->code]);
-        $this->logger->setHandlers([$handler]);
+        $this->_logger = $this->_loggerFactory->create(['name' => $this->_code]);
+        $handler = $this->_handlerFactory->create(['name' => $this->_code]);
+        $this->_logger->setHandlers([$handler]);
     }
 
     /**
@@ -66,7 +66,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             // @codingStandardsIgnoreEnd
         }
 
-        $this->logger->log('DEBUG', $text);
+        $this->_logger->log('DEBUG', $text);
     }
 
     /**
