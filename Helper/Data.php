@@ -154,4 +154,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return preg_replace('/\s+/', '', str_replace(['(', ')', '-', ' '], '', trim($phone)));
     }
+    
+    /**
+     * @return \Magento\Framework\HTTP\Client\Curl
+     */
+    public function getCurlClient()
+    {
+        return $this->_curlClient;
+    }
 }
