@@ -7,6 +7,7 @@
 
 namespace Mygento\Base\Model\Config\Backend;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
@@ -157,8 +158,8 @@ class File extends \Magento\Framework\App\Config\Value
     {
         $directory = $this->_filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
         if ($this->_maxFileSize > 0 && $directory->stat(
-            $directory->getRelativePath($filePath)
-        )['size'] > $this->_maxFileSize * 1024
+                $directory->getRelativePath($filePath)
+            )['size'] > $this->_maxFileSize * 1024
         ) {
             throw new LocalizedException(
                 __(
@@ -179,9 +180,9 @@ class File extends \Magento\Framework\App\Config\Value
         $fieldConfig = $this->getFieldConfig();
         $dirParams = array_key_exists('upload_dir', $fieldConfig) ? $fieldConfig['upload_dir'] : [];
         return is_array($dirParams) && array_key_exists(
-            'scope_info',
-            $dirParams
-        ) && $dirParams['scope_info'];
+                'scope_info',
+                $dirParams
+            ) && $dirParams['scope_info'];
     }
 
     /**
@@ -203,9 +204,9 @@ class File extends \Magento\Framework\App\Config\Value
         if (is_array($fieldConfig['upload_dir'])) {
             $uploadDir = $fieldConfig['upload_dir']['value'];
             if (array_key_exists(
-                'scope_info',
-                $fieldConfig['upload_dir']
-            ) && $fieldConfig['upload_dir']['scope_info']
+                    'scope_info',
+                    $fieldConfig['upload_dir']
+                ) && $fieldConfig['upload_dir']['scope_info']
             ) {
                 $uploadDir = $this->_appendScopeInfo($uploadDir);
             }

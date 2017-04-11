@@ -114,7 +114,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             . '<a href="%1" target="_blank">ticket tracking system</a>',
             $ticketUrl
         );
-        $bugs = __('Please report all bugs and feature requests.') ;
+        $bugs = __('Please report all bugs and feature requests.');
         $emailtext = __(
             'If for some reasons you can not submit ticket '
             . 'to our system, you can write us an email %1.',
@@ -126,17 +126,17 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             $email
         );
         $tender = __('Tender offer can be checked '
-            . '<a href="http://www.mygento.ru/oferta" target="_blank">here</a>') ;
+            . '<a href="http://www.mygento.ru/oferta" target="_blank">here</a>');
 
         $html .= '<table class="mygento-info" cellspacing="0" cellpading="0">'
             . '<tr class="mygento-info-line">';
-        $html .= '<tr><td>' . __('Support') . ':</td>'.
-            '<td>' .$url . '.<br/><br/>' .$bugs .
-            '<br/><br/>' . $emailtext. '</td></tr>';
-        $html .= '<tr><td>' . __('License') . ':</td><td>' . $tender. '</td></tr>';
+        $html .= '<tr><td>' . __('Support') . ':</td>' .
+            '<td>' . $url . '.<br/><br/>' . $bugs .
+            '<br/><br/>' . $emailtext . '</td></tr>';
+        $html .= '<tr><td>' . __('License') . ':</td><td>' . $tender . '</td></tr>';
         $html .= '<tr class="mygento-info-line "><td>'
             . '<img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/>'
-            . '</td><td>' . $hiretext. '<br/><br/>' . __(
+            . '</td><td>' . $hiretext . '<br/><br/>' . __(
                 'You can check all providable services on '
                 . '<a href="%1" target="_blank">our website</a>.',
                 $site . '/services'
@@ -148,7 +148,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         $dispatchResult = new \Magento\Framework\DataObject($modules);
         $modules = $dispatchResult->toArray();
 
-        $html .= '<h2>'.__('Installed Extensions').'</h2>';
+        $html .= '<h2>' . __('Installed Extensions') . '</h2>';
         $html .= '<ul class="mygento-mod-list">';
         sort($modules);
         foreach ($modules as $moduleName) {
@@ -230,6 +230,6 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             'value' => $currentVer,
         ])->setRenderer($this->_getFieldRenderer());
 
-        return '<li>'.$status.$field->toHtml().'</li>';
+        return '<li>' . $status . $field->toHtml() . '</li>';
     }
 }
