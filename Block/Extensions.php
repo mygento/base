@@ -126,7 +126,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             $email
         );
         $tender = __('Tender offer can be checked '
-            . '<a href="http://www.mygento.ru/oferta" target="_blank">here</a>');
+            . '<a href="https://www.mygento.ru/oferta" target="_blank">here</a>');
 
         $html .= '<table class="mygento-info" cellspacing="0" cellpading="0">'
             . '<tr class="mygento-info-line">';
