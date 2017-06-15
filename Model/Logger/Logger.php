@@ -15,12 +15,11 @@ class Logger extends \Magento\Framework\Logger\Monolog
      * @param \Mygento\Base\Model\Logger\Handler $handler
      */
     public function __construct(
-        $name,
-        \Mygento\Base\Model\Logger\Handler $handler
+        $name
     ) {
         parent::__construct(
             $name,
-            [$handler] // only one handler
+            []
         );
     }
 }

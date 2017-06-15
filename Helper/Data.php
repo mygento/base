@@ -34,21 +34,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /* @var \Magento\Framework\HTTP\Client\Curl */
     protected $_curlClient;
 
-
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,
         \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory,
         \Magento\Framework\Encryption\Encryptor $encryptor,
         \Magento\Framework\HTTP\Client\Curl $curl
-
     ) {
         parent::__construct($context);
         $this->_loggerFactory = $loggerFactory;
         $this->_handlerFactory = $handlerFactory;
         $this->_encryptor = $encryptor;
         $this->_curlClient = $curl;
-
 
         $this->_logger = $this->_loggerFactory->create(['name' => $this->_code]);
         $handler = $this->_handlerFactory->create(['name' => $this->_code]);
@@ -61,9 +58,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param type $isArray
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function addLog($text, $isArray = false)
+    public function addLog($text)
     {
-        if (is_array($text) || $isArray) {
+        if (is_array($text)) {
             // @codingStandardsIgnoreStart
             $text = print_r($text, true);
             // @codingStandardsIgnoreEnd

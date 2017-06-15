@@ -7,19 +7,22 @@
 
 namespace Mygento\Base\Model\Source;
 
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+
 class Attributes implements \Magento\Framework\Option\ArrayInterface
 {
 
     /**
      * Possible payment types
      *
+     * @SuppressWarnings(PHPMD)
      * @return array
      */
     public function getAllOptions()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $obMan = \Magento\Framework\App\ObjectManager::getInstance();
 
-        $coll = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
+        $coll = $obMan->create(Collection::class);
 
         $coll->addFieldToFilter(\Magento\Eav\Model\Entity\Attribute\Set::KEY_ENTITY_TYPE_ID, 4);
 
@@ -32,7 +35,6 @@ class Attributes implements \Magento\Framework\Option\ArrayInterface
         $coll->addFieldToFilter('used_in_product_listing', '1');
         $coll->setOrder('frontend_label', 'ASC');
 
-
         $attrAll = $coll->load()->getItems();
 
         $_options = [];
@@ -44,7 +46,6 @@ class Attributes implements \Magento\Framework\Option\ArrayInterface
 
         // Loop over all attributes
         foreach ($attrAll as $attr) {
-
             $label = $attr->getStoreLabel() ? $attr->getStoreLabel() : $attr->getFrontendLabel();
             if ('' != $label) {
                 $_options[] = ['label' => $label, 'value' => $attr->getAttributeCode()];
@@ -57,5 +58,4 @@ class Attributes implements \Magento\Framework\Option\ArrayInterface
     {
         return $this->getAllOptions();
     }
-
 }
