@@ -54,9 +54,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      *
-     * @param type $text
-     * @param type $isArray
-     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     * @param string|array $text
      */
     public function addLog($text)
     {
