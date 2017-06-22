@@ -160,4 +160,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_curlClient;
     }
+    
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->_code;
+    }
 }
