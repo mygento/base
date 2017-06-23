@@ -77,8 +77,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      *
-     * @param type $config_path
-     * @return type
+     * @param string $config_path
+     * @return string
      */
     public function getConfig($configPath)
     {
@@ -117,10 +117,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      *
-     * @param type $url
-     * @param type $data
-     * @param type $headers
-     * @return type
+     * @param string $url
+     * @param array $data
+     * @param array $headers
+     * @return mixed
      */
     public function requestApiPost($url, $data, $headers = [])
     {
@@ -145,8 +145,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      *
-     * @param type $phone
-     * @return type
+     * @param string $phone
+     * @return string
      */
     public function normalizePhone($phone)
     {
@@ -160,7 +160,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_curlClient;
     }
-    
+
     /**
      * @return string
      */
