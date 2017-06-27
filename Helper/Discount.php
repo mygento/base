@@ -18,6 +18,9 @@ class Discount extends \Mygento\Base\Helper\Data
     /** @var \Magento\Eav\Model\Config */
     protected $_eavConfig;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    protected $_storeManager;
+
     /**
      * Constructor
      *
@@ -29,6 +32,7 @@ class Discount extends \Mygento\Base\Helper\Data
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -46,12 +50,12 @@ class Discount extends \Mygento\Base\Helper\Data
             $loggerFactory,
             $handlerFactory,
             $encryptor,
-            $curl,
-            $storeManager
+            $curl
         );
 
         $this->_productResource = $productResource;
         $this->_eavConfig       = $eavConfig;
+        $this->_storeManager    = $storeManager;
     }
 
     /**

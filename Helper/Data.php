@@ -33,9 +33,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /** @var \Magento\Framework\HTTP\Client\Curl */
     protected $_curlClient;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
-    protected $_storeManager;
-
     /**
      * Constructor
      *
@@ -44,15 +41,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory
      * @param \Magento\Framework\Encryption\Encryptor $encryptor
      * @param \Magento\Framework\HTTP\Client\Curl $curl
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,
         \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory,
         \Magento\Framework\Encryption\Encryptor $encryptor,
-        \Magento\Framework\HTTP\Client\Curl $curl,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\HTTP\Client\Curl $curl
     )
     {
         parent::__construct($context);
@@ -60,7 +55,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_handlerFactory = $handlerFactory;
         $this->_encryptor      = $encryptor;
         $this->_curlClient     = $curl;
-        $this->_storeManager   = $storeManager;
 
         $this->_logger = $this->_loggerFactory->create(['name' => $this->_code]);
         $handler       = $this->_handlerFactory->create(['name' => $this->_code]);
