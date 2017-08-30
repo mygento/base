@@ -4,6 +4,7 @@
  * @copyright See COPYING.txt for license details.
  * @package Mygento_Base
  */
+
 namespace Mygento\Base\Helper;
 
 /**
@@ -12,60 +13,55 @@ namespace Mygento\Base\Helper;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
-    /** @var \Mygento\Base\Model\Logger\LoggerFactory */
+    /* @var \Mygento\Base\Model\Logger\LoggerFactory */
     protected $_loggerFactory;
 
-    /** @var \Mygento\Base\Model\Logger\Logger */
+    /* @var \Mygento\Base\Model\Logger\Logger */
     protected $_logger;
 
-    /** @var \Mygento\Base\Model\Logger\HandlerFactory */
+    /* @var \Mygento\Base\Model\Logger\HandlerFactory */
     protected $_handlerFactory;
 
-    /** @var \Magento\Framework\Encryption\Encrypto */
+    /* @var \Magento\Framework\Encryption\Encrypto */
     protected $_encryptor;
 
-    /** @var string */
+    /* @var string */
     protected $_code = 'mygento';
 
-    /** @var \Magento\Directory\Helper\Data */
+    /* @var \Magento\Directory\Helper\Data */
     protected $_directoryHelper;
 
-    /** @var \Magento\Framework\HTTP\Client\Curl */
+    /* @var \Magento\Framework\HTTP\Client\Curl */
     protected $_curlClient;
 
-    /**
-     * Constructor
-     *
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory
-     * @param \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory
-     * @param \Magento\Framework\Encryption\Encryptor $encryptor
-     * @param \Magento\Framework\HTTP\Client\Curl $curl
-     */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,
         \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory,
         \Magento\Framework\Encryption\Encryptor $encryptor,
         \Magento\Framework\HTTP\Client\Curl $curl
-    )
-    {
+    ) {
         parent::__construct($context);
-        $this->_loggerFactory  = $loggerFactory;
+        $this->_loggerFactory = $loggerFactory;
         $this->_handlerFactory = $handlerFactory;
-        $this->_encryptor      = $encryptor;
-        $this->_curlClient     = $curl;
+        $this->_encryptor = $encryptor;
+        $this->_curlClient = $curl;
 
         $this->_logger = $this->_loggerFactory->create(['name' => $this->_code]);
-        $handler       = $this->_handlerFactory->create(['name' => $this->_code]);
+        $handler = $this->_handlerFactory->create(['name' => $this->_code]);
         $this->_logger->setHandlers([$handler]);
     }
 
     /**
+     *
      * @param string|array $text
      */
     public function addLog($text)
     {
+        if (!$this->getConfig('debug')) {
+            return;
+        }
+
         if (is_array($text)) {
             // @codingStandardsIgnoreStart
             $text = print_r($text, true);
@@ -84,17 +80,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     *
      * @param string $config_path
      * @return string
      */
     public function getConfig($configPath)
     {
         return $this->scopeConfig->getValue(
-                $configPath, \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            $configPath,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
+     *
      * @param type $url
      * @param type $data
      * @param type $headers
@@ -121,6 +120,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     *
      * @param string $url
      * @param array $data
      * @param array $headers
@@ -148,6 +148,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     *
      * @param string $phone
      * @return string
      */
@@ -171,5 +172,4 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_code;
     }
-
 }
