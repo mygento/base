@@ -9,12 +9,16 @@ namespace Mygento\Base\Plugin;
 
 class Transaction
 {
+
+    /*
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * */
     public function afterGetTransactionTypes(
         \Magento\Sales\Model\Order\Payment\Transaction $subject,
         $result
     ) {
         return array_merge($result, [
-            'fiscal_receipt'        => __('Fiscal receipt'),
+            'fiscal_receipt' => __('Fiscal receipt'),
             'fiscal_receipt_refund' => __('Fiscal receipt refund'),
         ]);
     }
