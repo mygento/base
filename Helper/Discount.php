@@ -63,6 +63,8 @@ class Discount extends \Mygento\Base\Helper\Data
      */
     const VERSION = '1.0.3';
 
+
+    // @codingStandardsIgnoreStart
     /**
      * Returns item's data as array with properly calculated discount
      *
@@ -288,4 +290,6 @@ class Discount extends \Mygento\Base\Helper\Data
         }
         return $taxValue;
     }
+
+    // @codingStandardsIgnoreEnd
 }
