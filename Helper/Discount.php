@@ -50,7 +50,10 @@ class Discount extends \Mygento\Base\Helper\Data
             $loggerFactory,
             $handlerFactory,
             $encryptor,
-            $curl
+            $curl,
+            $eavConfig,
+            $productResource,
+            $storeManager
         );
 
         $this->_productResource = $productResource;

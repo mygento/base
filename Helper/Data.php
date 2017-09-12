@@ -34,18 +34,36 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /* @var \Magento\Framework\HTTP\Client\Curl */
     protected $_curlClient;
 
+    /**@var \Magento\Catalog\Model\Product */
+    protected $_tempProduct = null;
+
+    /**@var \Magento\Eav\Model\Config */
+    protected $_eavConfig;
+
+    /**@var \Magento\Catalog\Model\ResourceModel\Product */
+    protected $_resourceProduct;
+
+    /**@var \Magento\Store\Model\StoreManagerInterface */
+    protected $_storeManager;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,
         \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory,
         \Magento\Framework\Encryption\Encryptor $encryptor,
-        \Magento\Framework\HTTP\Client\Curl $curl
+        \Magento\Framework\HTTP\Client\Curl $curl,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Catalog\Model\ResourceModel\Product $resourceProduct,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
-        $this->_loggerFactory = $loggerFactory;
-        $this->_handlerFactory = $handlerFactory;
-        $this->_encryptor = $encryptor;
-        $this->_curlClient = $curl;
+        $this->_loggerFactory   = $loggerFactory;
+        $this->_handlerFactory  = $handlerFactory;
+        $this->_encryptor       = $encryptor;
+        $this->_curlClient      = $curl;
+        $this->_eavConfig       = $eavConfig;
+        $this->_resourceProduct = $resourceProduct;
+        $this->_storeManager    = $storeManager;
 
         $this->_logger = $this->_loggerFactory->create(['name' => $this->_code]);
         $handler = $this->_handlerFactory->create(['name' => $this->_code]);
@@ -171,5 +189,43 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCode()
     {
         return $this->_code;
+    }
+
+    public function getAttributeValue($param, $productId, $prefix = '')
+    {
+        $attributeCode = $this->getConfig($prefix . $param);
+
+        //$this->addLog('attr for ' . $param . ' -> ' . $attributeCode);
+
+        if ('0' != $attributeCode && 0 !== $attributeCode) {
+            $entityType    = $this->_resourceProduct->getEntityType();
+            $attribute     = $this->_eavConfig->getAttribute($entityType, $attributeCode);
+            $attributeMode = $attribute->getFrontendInput();
+            if ('select' == $attributeMode) {
+                //need to use product model
+                if (!$this->_tempProduct) {
+                    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                    $this->_tempProduct = $objectManager->get('Magento\Catalog\Model\Product')
+                                                        ->load($productId);
+                }
+                $product = $this->_tempProduct;
+                $value = $product->getAttributeText($attributeCode);
+            } else {
+                //just raw DB data
+                $value = $this->_resourceProduct->getAttributeRawValue(
+                    $productId,
+                    $attributeCode,
+                    $this->_storeManager->getStore()
+                );
+
+                if (is_array($value) && isset($value[$attributeCode])) {
+                    $value = $value[$attributeCode];
+                }
+            }
+        } else {
+            $value = $this->getConfig($prefix . $param . '_default');
+        }
+
+        return $value;
     }
 }
