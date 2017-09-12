@@ -9,7 +9,7 @@ namespace Mygento\Base\Model\Logger;
 
 class Handler extends \Magento\Framework\Logger\Handler\Base
 {
-
+    
     /**
      *
      * @param type $name

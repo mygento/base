@@ -18,37 +18,37 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @var \Magento\Framework\Module\ModuleListInterface
      */
     protected $_moduleList;
-
+    
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $_layoutFactory;
-
+    
     /**
      * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
-
+    
     /**
      * @var DecoderInterface
      */
     protected $_jsonDecoder;
-
+    
     /**
      * @var \Magento\Framework\Filesystem\Driver\File
      */
     protected $_filesystem;
-
+    
     /**
      * @var \Mygento\Base\Helper\Module
      */
     protected $_moduleHelper;
-
+    
     /**
      * @var \Magento\Store\Api\Data\StoreInterface
      */
     protected $_store;
-
+    
     /**
      *
      * @param \Magento\Backend\Block\Context $context
@@ -79,7 +79,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         array $data = []
     ) {
         parent::__construct($context, $authSession, $jsHelper, $data);
-
+        
         $this->_moduleList = $moduleList;
         $this->_layoutFactory = $layoutFactory;
         $this->_moduleReader = $moduleReader;
@@ -89,7 +89,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         $this->_store = $store;
         $this->_scopeConfig = $context->getScopeConfig();
     }
-
+    
     /**
      * Render fieldset html
      *
@@ -99,15 +99,15 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     public function render(AbstractElement $element)
     {
         $html = $this->_getHeaderHtml($element);
-
+        
         $site = 'https://www.mygento.net';
         $email = 'connect@mygento.net';
-
+        
         if ($this->_store->getLocaleCode() == 'ru_RU') {
             $site = 'https://www.mygento.ru';
             $email = 'connect@mygento.ru';
         }
-
+        
         $ticketUrl = "mailto:support@mygento.ru";
         $url = __(
             'Purchased extensions support is available through '
@@ -127,7 +127,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         );
         $tender = __('Tender offer can be checked '
             . '<a href="https://www.mygento.ru/oferta" target="_blank">here</a>');
-
+        
         $html .= '<table class="mygento-info" cellspacing="0" cellpading="0">'
             . '<tr class="mygento-info-line">';
         $html .= '<tr><td>' . __('Support') . ':</td>' .
@@ -142,12 +142,12 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
                 $site . '/services'
             ) . '</td></tr><tr class="mygento-info-line"></tr>';
         $html .= '</table>';
-
+        
         $modules = $this->_moduleList->getNames();
-
+        
         $dispatchResult = new \Magento\Framework\DataObject($modules);
         $modules = $dispatchResult->toArray();
-
+        
         $html .= '<h2>' . __('Installed Extensions') . '</h2>';
         $html .= '<ul class="mygento-mod-list">';
         sort($modules);
@@ -157,16 +157,16 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             ) {
                 continue;
             }
-
+            
             $html .= $this->_getFieldHtml($element, $moduleName);
         }
         $html .= '</ul>';
-
+        
         $html .= $this->_getFooterHtml($element);
-
+        
         return $html;
     }
-
+    
     /**
      * @return \Magento\Framework\View\Element\BlockInterface
      */
@@ -174,15 +174,15 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         if (empty($this->_fieldRenderer)) {
             $layout = $this->_layoutFactory->create();
-
+            
             $this->_fieldRenderer = $layout->createBlock(
                 'Magento\Config\Block\System\Config\Form\Field'
             );
         }
-
+        
         return $this->_fieldRenderer;
     }
-
+    
     /**
      * Read info about extension from composer json file
      * @param $moduleCode
@@ -193,13 +193,13 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         $dir = $this->_moduleReader->getModuleDir('', $moduleCode);
         $file = $dir . DIRECTORY_SEPARATOR . 'composer.json';
-
+        
         $string = $this->_filesystem->fileGetContents($file);
         $json = $this->_jsonDecoder->decode($string);
-
+        
         return $json;
     }
-
+    
     /**
      * @param $fieldset
      * @param $moduleCode
@@ -214,22 +214,22 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
         ) {
             return '';
         }
-
+        
         $currentVer = $module['version'];
         $moduleName = $module['description'];
         $status = '<span class="mygento-icon-success"></span>';
-
+        
         // in case if module output disabled
         if ($this->_scopeConfig->getValue('advanced/modules_disable_output/' . $moduleCode)) {
             $status = __('Output disabled');
         }
-
+        
         $field = $fieldset->addField($moduleCode, 'label', [
             'name' => 'dummy',
             'label' => $moduleName,
             'value' => $currentVer,
         ])->setRenderer($this->_getFieldRenderer());
-
+        
         return '<li>' . $status . $field->toHtml() . '</li>';
     }
 }

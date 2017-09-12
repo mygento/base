@@ -12,40 +12,40 @@ namespace Mygento\Base\Helper;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-
+    
     /* @var \Mygento\Base\Model\Logger\LoggerFactory */
     protected $_loggerFactory;
-
+    
     /* @var \Mygento\Base\Model\Logger\Logger */
     protected $_logger;
-
+    
     /* @var \Mygento\Base\Model\Logger\HandlerFactory */
     protected $_handlerFactory;
-
+    
     /* @var \Magento\Framework\Encryption\Encrypto */
     protected $_encryptor;
-
+    
     /* @var string */
     protected $_code = 'mygento';
-
+    
     /* @var \Magento\Directory\Helper\Data */
     protected $_directoryHelper;
-
+    
     /* @var \Magento\Framework\HTTP\Client\Curl */
     protected $_curlClient;
-
+    
     /**@var \Magento\Catalog\Model\Product */
     protected $_tempProduct = null;
-
+    
     /**@var \Magento\Eav\Model\Config */
     protected $_eavConfig;
-
+    
     /**@var \Magento\Catalog\Model\ResourceModel\Product */
     protected $_resourceProduct;
-
+    
     /**@var \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManager;
-
+    
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,
@@ -57,19 +57,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
-        $this->_loggerFactory   = $loggerFactory;
-        $this->_handlerFactory  = $handlerFactory;
-        $this->_encryptor       = $encryptor;
-        $this->_curlClient      = $curl;
-        $this->_eavConfig       = $eavConfig;
+        $this->_loggerFactory = $loggerFactory;
+        $this->_handlerFactory = $handlerFactory;
+        $this->_encryptor = $encryptor;
+        $this->_curlClient = $curl;
+        $this->_eavConfig = $eavConfig;
         $this->_resourceProduct = $resourceProduct;
-        $this->_storeManager    = $storeManager;
-
+        $this->_storeManager = $storeManager;
+        
         $this->_logger = $this->_loggerFactory->create(['name' => $this->_code]);
         $handler = $this->_handlerFactory->create(['name' => $this->_code]);
         $this->_logger->setHandlers([$handler]);
     }
-
+    
     /**
      *
      * @param string|array $text
@@ -79,16 +79,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (!$this->getConfig('debug')) {
             return;
         }
-
+        
         if (is_array($text)) {
             // @codingStandardsIgnoreStart
             $text = print_r($text, true);
             // @codingStandardsIgnoreEnd
         }
-
+        
         $this->_logger->log('DEBUG', $text);
     }
-
+    
     /**
      * @param string $path
      */
@@ -96,7 +96,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_encryptor->decrypt($path);
     }
-
+    
     /**
      *
      * @param string $config_path
@@ -109,7 +109,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
-
+    
     /**
      *
      * @param type $url
@@ -125,18 +125,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         curl_setopt($curlh, CURLOPT_POST, false);
         curl_setopt($curlh, CURLOPT_HEADER, 0);
         curl_setopt($curlh, CURLOPT_RETURNTRANSFER, true);
-
+        
         foreach ($headers as $header) {
             curl_setopt($curlh, CURLOPT_HTTPHEADER, [$header]);
         }
-
+        
         $result = curl_exec($curlh);
         curl_close($curlh);
         // @codingStandardsIgnoreEnd
         $this->addLog($result, true);
         return $result;
     }
-
+    
     /**
      *
      * @param string $url
@@ -153,18 +153,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         curl_setopt($curlh, CURLOPT_POST, true);
         curl_setopt($curlh, CURLOPT_HEADER, 0);
         curl_setopt($curlh, CURLOPT_RETURNTRANSFER, true);
-
+        
         foreach ($headers as $header) {
             curl_setopt($curlh, CURLOPT_HTTPHEADER, [$header]);
         }
-
+        
         $result = curl_exec($curlh);
         curl_close($curlh);
         // @codingStandardsIgnoreEnd
         $this->addLog($result, true);
         return $result;
     }
-
+    
     /**
      *
      * @param string $phone
@@ -174,7 +174,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return preg_replace('/\s+/', '', str_replace(['(', ')', '-', ' '], '', trim($phone)));
     }
-
+    
     /**
      * @return \Magento\Framework\HTTP\Client\Curl
      */
@@ -182,7 +182,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_curlClient;
     }
-
+    
     /**
      * @return string
      */
@@ -190,23 +190,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_code;
     }
-
+    
     public function getAttributeValue($param, $productId, $prefix = '')
     {
         $attributeCode = $this->getConfig($prefix . $param);
-
+        
         //$this->addLog('attr for ' . $param . ' -> ' . $attributeCode);
-
+        
         if ('0' != $attributeCode && 0 !== $attributeCode) {
-            $entityType    = $this->_resourceProduct->getEntityType();
-            $attribute     = $this->_eavConfig->getAttribute($entityType, $attributeCode);
+            $entityType = $this->_resourceProduct->getEntityType();
+            $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
             $attributeMode = $attribute->getFrontendInput();
             if ('select' == $attributeMode) {
                 //need to use product model
+                //TODO: Avoid ObjectManager
                 if (!$this->_tempProduct) {
                     $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
                     $this->_tempProduct = $objectManager->get('Magento\Catalog\Model\Product')
-                                                        ->load($productId);
+                        ->load($productId);
                 }
                 $product = $this->_tempProduct;
                 $value = $product->getAttributeText($attributeCode);
@@ -217,7 +218,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $attributeCode,
                     $this->_storeManager->getStore()
                 );
-
+                
                 if (is_array($value) && isset($value[$attributeCode])) {
                     $value = $value[$attributeCode];
                 }
@@ -225,7 +226,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         } else {
             $value = $this->getConfig($prefix . $param . '_default');
         }
-
+        
         return $value;
     }
 }

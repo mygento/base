@@ -9,10 +9,11 @@ namespace Mygento\Base\Plugin;
 
 class Transaction
 {
-
-    /*
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * */
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     */
+    
     public function afterGetTransactionTypes(
         \Magento\Sales\Model\Order\Payment\Transaction $subject,
         $result
