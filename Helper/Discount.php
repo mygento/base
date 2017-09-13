@@ -36,9 +36,7 @@ class Discount extends \Mygento\Base\Helper\Data
         \Magento\Framework\Encryption\Encryptor $encryptor,
         \Magento\Framework\HTTP\Client\Curl $curl,
         \Magento\Catalog\Model\ProductRepository $productRepository
-    )
-    {
-
+    ) {
         parent::__construct(
             $context,
             $loggerFactory,
@@ -55,7 +53,6 @@ class Discount extends \Mygento\Base\Helper\Data
      *
      */
     const VERSION = '1.0.3';
-
 
     // @codingStandardsIgnoreStart
     /**
