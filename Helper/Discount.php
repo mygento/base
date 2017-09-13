@@ -6,20 +6,15 @@
  */
 namespace Mygento\Base\Helper;
 
+//TODO: FIgure out - do we need to extend this parent helper?
+
 /**
  * Module helper
  */
 class Discount extends \Mygento\Base\Helper\Data
 {
-
-    /** @var \Magento\Catalog\Model\ResourceModel\Product */
-    protected $_productResource;
-
-    /** @var \Magento\Eav\Model\Config */
-    protected $_eavConfig;
-
-    /** @var \Magento\Store\Model\StoreManagerInterface */
-    protected $_storeManager;
+    /**@var \Magento\Catalog\Model\ProductRepository */
+    protected $_productRepository;
 
     /**
      * Constructor
@@ -40,25 +35,20 @@ class Discount extends \Mygento\Base\Helper\Data
         \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory,
         \Magento\Framework\Encryption\Encryptor $encryptor,
         \Magento\Framework\HTTP\Client\Curl $curl,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        \Magento\Eav\Model\Config $eavConfig
-    ) {
-    
+        \Magento\Catalog\Model\ProductRepository $productRepository
+    )
+    {
+
         parent::__construct(
             $context,
             $loggerFactory,
             $handlerFactory,
             $encryptor,
             $curl,
-            $eavConfig,
-            $productResource,
-            $storeManager
+            $productRepository
         );
 
-        $this->_productResource = $productResource;
-        $this->_eavConfig       = $eavConfig;
-        $this->_storeManager    = $storeManager;
+        $this->_productRepository = $productRepository;
     }
 
     /**
@@ -280,6 +270,7 @@ class Discount extends \Mygento\Base\Helper\Data
 
         $store = $storeId ? $this->_storeManager->getStore($storeId) : $this->_storeManager->getStore();
 
+        //TODO: Use parent helper here
         $taxValue = $this->_productResource->getAttributeRawValue(
             $item->getProductId(),
             $taxAttributeCode,
