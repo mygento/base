@@ -195,7 +195,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttrValueByParam($pathToParam, $productId)
     {
         $attributeCode = $this->getConfig($pathToParam);
-        if ('0' == $attributeCode || 0 === $attributeCode) {
+        if (!$attributeCode || '0' == $attributeCode || 0 === $attributeCode) {
             return $this->getConfig($pathToParam . '_default');
         }
 
