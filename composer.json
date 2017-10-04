@@ -1,7 +1,7 @@
 {
   "name": "mygento/base",
   "type": "magento2-module",
-  "version": "2.0.12",
+  "version": "2.2.0",
   "license": "OSL-3.0",
   "homepage": "https://github.com/mygento/base",
   "description": "Mygento Base",
@@ -23,10 +23,10 @@
     "mygento"
   ],
   "require": {
-    "php": "~5.6.0|~7.0.0",
-    "magento/framework": ">= 100.1.9",
-    "magento/module-config": ">=100.1.6",
-    "magento/module-store": ">=100.1.7"
+    "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+    "magento/framework": "101.*",
+    "magento/module-config": "101.*",
+    "magento/module-store": "100.*"
   },
   "require-dev": {
     "mygento/coding-standard": "2.*",
