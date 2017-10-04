@@ -11,7 +11,7 @@ class Logger extends \Magento\Framework\Logger\Monolog
 {
     /**
      *
-     * @param type $name
+     * @param string $name
      * @param \Mygento\Base\Model\Logger\Handler $handler
      */
     public function __construct(

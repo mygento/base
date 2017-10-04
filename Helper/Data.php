@@ -12,31 +12,31 @@ namespace Mygento\Base\Helper;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    
+
     /* @var \Mygento\Base\Model\Logger\LoggerFactory */
     protected $_loggerFactory;
-    
+
     /* @var \Mygento\Base\Model\Logger\Logger */
     protected $_logger;
-    
+
     /* @var \Mygento\Base\Model\Logger\HandlerFactory */
     protected $_handlerFactory;
-    
+
     /* @var \Magento\Framework\Encryption\Encrypto */
     protected $_encryptor;
-    
+
     /* @var string */
     protected $_code = 'mygento';
-    
+
     /* @var \Magento\Directory\Helper\Data */
     protected $_directoryHelper;
-    
+
     /* @var \Magento\Framework\HTTP\Client\Curl */
     protected $_curlClient;
-    
+
     /**@var \Magento\Catalog\Model\Product */
     protected $_tempProduct = null;
-    
+
     /**@var \Magento\Catalog\Api\ProductRepositoryInterface */
     protected $_productRepository;
 
@@ -59,7 +59,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $handler       = $this->_handlerFactory->create(['name' => $this->_code]);
         $this->_logger->setHandlers([$handler]);
     }
-    
+
     /**
      *
      * @param string|array $text
@@ -69,16 +69,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (!$this->getConfig('debug')) {
             return;
         }
-        
+
         if (is_array($text)) {
             // @codingStandardsIgnoreStart
             $text = print_r($text, true);
             // @codingStandardsIgnoreEnd
         }
-        
+
         $this->_logger->log('DEBUG', $text);
     }
-    
+
     /**
      * @param string $path
      */
@@ -86,7 +86,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_encryptor->decrypt($path);
     }
-    
+
     /**
      *
      * @param string $config_path
@@ -107,10 +107,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      *
-     * @param type $url
-     * @param type $data
-     * @param type $headers
-     * @return type
+     * @param string $url
+     * @param array $data
+     * @param array $headers
+     * @return mixed
      */
     public function requestApiGet($url, $data, $headers = [])
     {
@@ -120,18 +120,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         curl_setopt($curlh, CURLOPT_POST, false);
         curl_setopt($curlh, CURLOPT_HEADER, 0);
         curl_setopt($curlh, CURLOPT_RETURNTRANSFER, true);
-        
+
         foreach ($headers as $header) {
             curl_setopt($curlh, CURLOPT_HTTPHEADER, [$header]);
         }
-        
+
         $result = curl_exec($curlh);
         curl_close($curlh);
         // @codingStandardsIgnoreEnd
         $this->addLog($result, true);
         return $result;
     }
-    
+
     /**
      *
      * @param string $url
@@ -148,18 +148,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         curl_setopt($curlh, CURLOPT_POST, true);
         curl_setopt($curlh, CURLOPT_HEADER, 0);
         curl_setopt($curlh, CURLOPT_RETURNTRANSFER, true);
-        
+
         foreach ($headers as $header) {
             curl_setopt($curlh, CURLOPT_HTTPHEADER, [$header]);
         }
-        
+
         $result = curl_exec($curlh);
         curl_close($curlh);
         // @codingStandardsIgnoreEnd
         $this->addLog($result, true);
         return $result;
     }
-    
+
     /**
      *
      * @param string $phone
@@ -169,7 +169,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return preg_replace('/\s+/', '', str_replace(['(', ')', '-', ' '], '', trim($phone)));
     }
-    
+
     /**
      * @return \Magento\Framework\HTTP\Client\Curl
      */
@@ -177,7 +177,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_curlClient;
     }
-    
+
     /**
      * @return string
      */

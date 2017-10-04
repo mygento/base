@@ -253,9 +253,9 @@ class Discount extends \Mygento\Base\Helper\Data
     }
 
     /**
-     * @param type $taxAttributeCode
-     * @param type $entity
-     * @param type $item
+     * @param string $taxAttributeCode
+     * @param mixed $entity
+     * @param mixed $item
      * @return string
      */
     protected function addTaxValue($taxAttributeCode, $entity, $item)
