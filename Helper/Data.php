@@ -209,4 +209,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         return $value;
     }
+    
+    /**
+     * Retrieve url
+     *
+     * @param   string $route
+     * @param   array $params
+     * @return  string
+     */
+    public function getUrl($route, $params = [])
+    {
+        return $this->_urlBuilder->getUrl($route, $params);
+    }
 }
