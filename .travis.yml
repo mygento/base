@@ -12,6 +12,7 @@ before_script:
 
 script:
 - php vendor/bin/parallel-lint --exclude vendor .
+- find . -path ./vendor -prune -o -name '*.xml' -print -exec xmllint --noout {} \;
 - php vendor/bin/phpcs .
 - php vendor/bin/phpmd . text cleancode,codesize,design,naming,unusedcode vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml --exclude vendor
 
