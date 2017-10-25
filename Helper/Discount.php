@@ -4,84 +4,39 @@
  * @copyright See COPYING.txt for license details.
  * @package Mygento_Base
  */
+
 namespace Mygento\Base\Helper;
 
-//TODO: FIgure out - do we need to extend this parent helper?
-
-/**
- * Module helper
- */
-class Discount extends \Mygento\Base\Helper\Data
+class Discount
 {
-    /**@var \Magento\Catalog\Model\ProductRepository */
-    protected $_productRepository;
+    const VERSION = '1.0.11';
 
-    /**
-     * Constructor
-     *
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory
-     * @param \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory
-     * @param \Magento\Framework\Encryption\Encryptor $encryptor
-     * @param \Magento\Framework\HTTP\Client\Curl $curl
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Mygento\Base\Model\Logger\LoggerFactory $loggerFactory,
-        \Mygento\Base\Model\Logger\HandlerFactory $handlerFactory,
-        \Magento\Framework\Encryption\Encryptor $encryptor,
-        \Magento\Framework\HTTP\Client\Curl $curl,
-        \Magento\Catalog\Model\ProductRepository $productRepository
-    ) {
-        parent::__construct(
-            $context,
-            $loggerFactory,
-            $handlerFactory,
-            $encryptor,
-            $curl,
-            $productRepository
-        );
+    protected $generalHelper = null;
 
-        $this->_productRepository = $productRepository;
+    protected $_entity           = null;
+    protected $_taxValue         = null;
+    protected $_taxAttributeCode = null;
+    protected $_shippingTaxValue = null;
+
+    protected $_discountlessSum = 0.00;
+
+    /** Есть ли item, цена которого не делится нацело */
+    protected $_wryItemUnitPriceExists = false;
+
+    protected $spreadDiscOnAllUnits = null;
+
+    const NAME_UNIT_PRICE      = 'disc_hlpr_price';
+    const NAME_SHIPPING_AMOUNT = 'disc_hlpr_shipping_amount';
+
+    public function __construct(\Mygento\Base\Helper\Data $baseHelper)
+    {
+        $this->generalHelper = $baseHelper;
     }
 
-    /**
+    /** Returns all items of the entity (order|invoice|creditmemo)
+     * with properly calculated discount and properly calculated Sum
      *
-     */
-    const VERSION = '1.0.3';
-
-    // @codingStandardsIgnoreStart
-    /**
-     * Returns item's data as array with properly calculated discount
-     *
-     * @param $entity \Magento\Sales\Model\Order | \Magento\Sales\Model\Order\Invoice | \Magento\Sales\Model\Order\Creditmemo
-     * @param $itemSku
-     * @param string $taxValue
-     * @param string $taxAttributeCode
-     * @param string $shippingTaxValue
-     * @return array|mixed
-     */
-    public function getItemWithDiscount(
-        $entity,
-        $itemSku,
-        $taxValue = '',
-        $taxAttributeCode = '',
-        $shippingTaxValue = ''
-    ) {
-
-        $items = $this->getRecalculated($entity, $taxValue, $taxAttributeCode, $shippingTaxValue)['items'];
-
-        return isset($items[$itemSku]) ? $items[$itemSku] : [];
-    }
-
-    /**
-     * Returns all items of the entity (order|invoice|creditmemo) with properly calculated discount and properly calculated Sum
-     *
-     * @param $entity \Magento\Sales\Model\Order | \Magento\Sales\Model\Order\Invoice | \Magento\Sales\Model\Order\Creditmemo
+     * @param $entity Mage_Sales_Model_Order|Mage_Sales_Model_Order_Invoice|Mage_Sales_Model_Order_Creditmemo
      * @param string $taxValue
      * @param string $taxAttributeCode Set it if info about tax is stored in product in certain attr
      * @param string $shippingTaxValue
@@ -91,19 +46,136 @@ class Discount extends \Mygento\Base\Helper\Data
         $entity,
         $taxValue = '',
         $taxAttributeCode = '',
-        $shippingTaxValue = ''
+        $shippingTaxValue = '',
+        $spreadDiscOnAllUnits = false
     ) {
+        if (!$entity) {
+            return;
+        }
 
-        $this->addLog("== START == Recalculation of entity prices. Entity class: " . get_class($entity) . ". Entity id: {$entity->getId()}");
+        if (!extension_loaded('bcmath')) {
+            $this->generalHelper->addLog('Fatal Error: bcmath php extension is not available.');
+            throw new \Exception('BCMath extension is not available in this PHP version.');
+        }
 
-        $subTotal       = $entity->getData('subtotal');
-        $shippingAmount = $entity->getData('shipping_amount');
-        $grandTotal     = $entity->getData('grand_total');
+        $this->_entity              = $entity;
+        $this->_taxValue            = $taxValue;
+        $this->_taxAttributeCode    = $taxAttributeCode;
+        $this->_shippingTaxValue    = $shippingTaxValue;
+        $this->spreadDiscOnAllUnits = $spreadDiscOnAllUnits;
+
+        $this->generalHelper->addLog("== START == Recalculation of entity prices. Helper Version: "
+            . self::VERSION . ".  Entity class: " . get_class($entity)
+            . ". Entity id: {$entity->getId()}");
+
+        //If there is no discounts - DO NOTHING
+        if ($this->checkSpread()) {
+            $this->applyDiscount();
+        } else {
+            //Это случай, когда не нужно размазывать копейки по позициям
+            //и при этом, позиции могут иметь скидки, равномерно делимые.
+
+            $this->setSimplePrices();
+        }
+
+        $this->generalHelper->addLog("== STOP == Recalculation. Entity class: "
+            . get_class($entity)
+            . ". Entity id: {$entity->getId()}");
+
+        return $this->buildFinalArray();
+    }
+
+    public function applyDiscount()
+    {
+        $subTotal       = $this->_entity->getData('subtotal_incl_tax');
+        $shippingAmount = $this->_entity->getData('shipping_incl_tax');
+        $grandTotal     = $this->_entity->getData('grand_total');
         $grandDiscount  = $grandTotal - $subTotal - $shippingAmount;
 
         $percentageSum = 0;
 
-        $items      = $entity->getAllVisibleItems() ? $entity->getAllVisibleItems() : $entity->getAllItems();
+        $items    = $this->getAllItems();
+        $itemsSum = 0.00;
+        foreach ($items as $item) {
+            if (!$this->isValidItem($item)) {
+                continue;
+            }
+
+            $price    = $item->getData('price_incl_tax');
+            $qty      = $item->getQty() ?: $item->getQtyOrdered();
+            $rowTotal = $item->getData('row_total_incl_tax');
+
+            //Calculate Percentage. The heart of logic.
+            $denominator   = ($this->spreadDiscOnAllUnits || ($subTotal == $this->_discountlessSum))
+                ? $subTotal
+                : ($subTotal - $this->_discountlessSum);
+            $rowPercentage = $rowTotal / $denominator;
+
+            if (!$this->spreadDiscOnAllUnits && (floatval($item->getDiscountAmount()) === 0.00)) {
+                $rowPercentage = 0;
+            }
+            $percentageSum += $rowPercentage;
+
+            $discountPerUnit   = $rowPercentage * $grandDiscount / $qty;
+            $priceWithDiscount = bcadd($price, $discountPerUnit, 2);
+
+            //Set Recalculated unit price for the item
+            $item->setData(self::NAME_UNIT_PRICE, $priceWithDiscount);
+
+            $itemsSum += round($priceWithDiscount * $qty, 2);
+        }
+
+        $this->generalHelper->addLog("Sum of all percentages: {$percentageSum}");
+
+        //Calculate DIFF!
+        $itemsSumDiff = round($this->slyFloor($grandTotal - $itemsSum - $shippingAmount, 3), 2);
+
+        $this->generalHelper->addLog("Items sum: {$itemsSum}. 
+            All Discounts: {$grandDiscount} 
+            Diff value: {$itemsSumDiff}");
+
+        if (bccomp($itemsSumDiff, 0.00, 2) < 0) {
+            //if: $itemsSumDiff < 0
+            $this->generalHelper->addLog(
+                "Notice: Sum of all items is greater than sumWithAllDiscount of entity. 
+                ItemsSumDiff: {$itemsSumDiff}"
+            );
+
+            $itemsSumDiff = 0.0;
+        }
+
+        //Set Recalculated Shipping Amount
+        $this->_entity->setData(
+            self::NAME_SHIPPING_AMOUNT,
+            $this->_entity->getData('shipping_incl_tax') + $itemsSumDiff
+        );
+    }
+
+    /**If everything is evenly divisible - set up prices without extra recalculations
+     * like applyDiscount() method does.
+     *
+     */
+    public function setSimplePrices()
+    {
+        $items = $this->getAllItems();
+        foreach ($items as $item) {
+            if (!$this->isValidItem($item)) {
+                continue;
+            }
+
+            $qty      = $item->getQty() ?: $item->getQtyOrdered();
+            $rowTotal = $item->getData('row_total_incl_tax');
+
+            $priceWithDiscount = ($rowTotal - $item->getData('discount_amount')) / $qty;
+            $item->setData(self::NAME_UNIT_PRICE, $priceWithDiscount);
+        }
+    }
+
+    public function buildFinalArray()
+    {
+        $grandTotal = $this->_entity->getData('grand_total');
+
+        $items      = $this->getAllItems();
         $itemsFinal = [];
         $itemsSum   = 0.00;
         foreach ($items as $item) {
@@ -111,35 +183,15 @@ class Discount extends \Mygento\Base\Helper\Data
                 continue;
             }
 
-            $taxValue = $taxAttributeCode ? $this->addTaxValue($taxAttributeCode, $entity, $item) : $taxValue;
-
-            $price    = $item->getData('price');
-            $qty      = $item->getQty() ?: $item->getQtyOrdered();
-            $rowTotal = $item->getData('row_total');
-
-            //Calculate Percentage. The heart of logic.
-            $rowPercentage = $rowTotal / $subTotal;
-            $percentageSum += $rowPercentage;
-
-            $discountPerUnit   = $rowPercentage * $grandDiscount / $qty;
-            $priceWithDiscount = $this->slyFloor($price + $discountPerUnit);
-
-            $entityItem = $this->_buildItem($item, $priceWithDiscount, $taxValue);
+            $taxValue   = $this->_taxAttributeCode
+                ? $this->addTaxValue($this->_taxAttributeCode, $item)
+                : $this->_taxValue;
+            $price      = $item->getData(self::NAME_UNIT_PRICE) ?: $item->getData('price_incl_tax');
+            $entityItem = $this->_buildItem($item, $price, $taxValue);
 
             $itemsFinal[$item->getId()] = $entityItem;
-            $itemsSum                   += $entityItem['sum'];
-        }
 
-        $this->addLog("Sum of all percentages: {$percentageSum}");
-
-        //Calculate DIFF!
-        $itemsSumDiff = round($this->slyFloor($grandTotal - $itemsSum - $shippingAmount, 3), 2);
-
-        $this->addLog("Items sum: {$itemsSum}. All Discounts: {$grandDiscount} Diff value: {$itemsSumDiff}");
-        if (bccomp($itemsSumDiff, 0.00, 2) < 0) {
-            //if: $itemsSumDiff < 0
-            $this->addLog("Notice: Sum of all items is greater than sumWithAllDiscount of entity. ItemsSumDiff: {$itemsSumDiff}");
-            $itemsSumDiff = 0.0;
+            $itemsSum += $entityItem['sum'];
         }
 
         $receipt = [
@@ -147,40 +199,39 @@ class Discount extends \Mygento\Base\Helper\Data
             'origGrandTotal' => floatval($grandTotal)
         ];
 
+        $shippingAmount = $this->_entity->getData(self::NAME_SHIPPING_AMOUNT)
+            ?: $this->_entity->getData('shipping_incl_tax') + 0.00;
+
         $shippingItem = [
-            'name'     => $this->getShippingName($entity),
-            'price'    => $entity->getShippingAmount() + $itemsSumDiff,
+            'name'     => $this->getShippingName($this->_entity),
+            'price'    => $shippingAmount,
             'quantity' => 1.0,
-            'sum'      => $entity->getShippingAmount() + $itemsSumDiff,
-            'tax'      => $shippingTaxValue,
+            'sum'      => $shippingAmount,
+            'tax'      => $this->_shippingTaxValue,
         ];
 
         $itemsFinal['shipping'] = $shippingItem;
         $receipt['items']       = $itemsFinal;
 
         if (!$this->_checkReceipt($receipt)) {
-            $this->addLog("WARNING: Calculation error! Sum of items is not equal to grandTotal!");
+            $this->generalHelper->addLog(
+                "WARNING: Calculation error! Sum of items is not equal to grandTotal!"
+            );
         }
-        $this->addLog("Final result of recalculation:");
-        $this->addLog($receipt);
-        $this->addLog("== STOP == Recalculation of entity prices. ");
+
+        $this->generalHelper->addLog("Final array:");
+        $this->generalHelper->addLog($receipt);
 
         return $receipt;
     }
 
-    /**
-     * @param \Magento\Sales\Model\Order\Invoice\Item | \Magento\Sales\Model\Order\Creditmemo\Item $item
-     * @param int $price
-     * @param string $taxValue
-     * @return array
-     * @throws \Exception
-     */
     protected function _buildItem($item, $price, $taxValue = '')
     {
-
         $qty = $item->getQty() ?: $item->getQtyOrdered();
         if (!$qty) {
-            throw new \Exception('Divide by zero. Qty of the item is equal to zero! Item: ' . $item->getId());
+            throw new \Exception(
+                'Divide by zero. Qty of the item is equal to zero! Item: ' . $item->getId()
+            );
         }
 
         $entityItem = [
@@ -191,55 +242,43 @@ class Discount extends \Mygento\Base\Helper\Data
             'tax'      => $taxValue,
         ];
 
-        $this->addLog("Item calculation details:");
-        $this->addLog("Item id: {$item->getId()}. Orig price: {$price} Item rowTotal: {$item->getRowTotal()} Price of 1 piece: {$price}. Result of calc:");
-        $this->addLog($entityItem);
+        $this->generalHelper->addLog("Item calculation details:");
+        $this->generalHelper->addLog("
+            Item id: {$item->getId()}. 
+            Orig price: {$price} 
+            Item rowTotalInclTax: {$item->getData('row_total_incl_tax')} 
+            PriceInclTax of 1 piece: {$price}. 
+            Result of calc:");
+        $this->generalHelper->addLog($entityItem);
 
         return $entityItem;
     }
 
-    /**
-     * @param \Magento\Sales\Model\Order\Invoice $entity
-     * @return string
-     */
     public function getShippingName($entity)
     {
-        return $entity->getShippingDescription() ?: ($entity->getOrder() ? $entity->getOrder()->getShippingDescription() : '');
+        return $entity->getShippingDescription()
+            ?: ($entity->getOrder() ? $entity->getOrder()->getShippingDescription() : '');
     }
 
-    /**
-     * Validation method. It sums up all items and compares it to grandTotal.
-     *
+    /**Validation method. It sums up all items and compares it to grandTotal.
      * @param array $receipt
      * @return bool True if all items price equal to grandTotal. False - if not.
      */
     protected function _checkReceipt(array $receipt)
     {
-        $sum = array_reduce(
-            $receipt['items'],
-            function ($carry, $item) {
-                $carry += $item['sum'];
-                return $carry;
-            }
-        );
+        $sum = array_reduce($receipt['items'], function ($carry, $item) {
+            $carry += $item['sum'];
+            return $carry;
+        });
 
         return bcsub($sum, $receipt['origGrandTotal'], 2) === '0.00';
     }
 
-    /**
-     * @param \Magento\Sales\Model\Order\Invoice\Item | \Magento\Sales\Model\Order\Creditmemo\Item $item
-     * @return boolean
-     */
     public function isValidItem($item)
     {
-        return $item->getRowTotal() && $item->getRowTotal() !== '0.0000';
+        return $item->getData('row_total_incl_tax') !== null;
     }
 
-    /**
-     * @param int $val
-     * @param int $precision
-     * @return int
-     */
     public function slyFloor($val, $precision = 2)
     {
         $factor  = 1.00;
@@ -252,35 +291,79 @@ class Discount extends \Mygento\Base\Helper\Data
         return (floor(abs($val) * $divider) / $divider) * $factor;
     }
 
-    /**
-     * @param string $taxAttributeCode
-     * @param mixed $entity
-     * @param mixed $item
-     * @return string
-     */
-    protected function addTaxValue($taxAttributeCode, $entity, $item)
+    protected function addTaxValue($taxAttributeCode, $item)
     {
         if (!$taxAttributeCode) {
             return '';
         }
-        $storeId = $entity->getStoreId();
 
-        $store = $storeId ? $this->_storeManager->getStore($storeId) : $this->_storeManager->getStore();
-
-        //TODO: Use parent helper here
-        $taxValue = $this->_productResource->getAttributeRawValue(
-            $item->getProductId(),
-            $taxAttributeCode,
-            $store
-        );
-
-        $attributeModel = $this->_eavConfig->getAttribute('catalog_product', $taxAttributeCode);
-
-        if ($attributeModel->getData('frontend_input') == 'select') {
-            $taxValue = $attributeModel->getSource()->getOptionText($taxValue);
-        }
-        return $taxValue;
+        return $this->generalHelper->getAttributeValue($taxAttributeCode, $item->getProductId());
     }
 
-    // @codingStandardsIgnoreEnd
+    /** It checks do we need to spread discount on all units
+     * and sets flag $this->spreadDiscOnAllUnits
+     *
+     * @return boolean
+     */
+    public function checkSpread()
+    {
+        $items = $this->getAllItems();
+
+        $sum                    = 0.00;
+        $sumDiscountAmount      = 0.00;
+        $this->_discountlessSum = 0.00;
+        foreach ($items as $item) {
+            $qty      = $item->getQty() ?: $item->getQtyOrdered();
+            $rowPrice = $item->getData('row_total_incl_tax') - $item->getData('discount_amount');
+
+            if (floatval($item->getData('discount_amount')) === 0.00) {
+                $this->_discountlessSum += $item->getData('row_total_incl_tax');
+            }
+
+            /* Означает, что есть item, цена которого не делится нацело*/
+            if (!$this->_wryItemUnitPriceExists) {
+                $decimals = $this->getDecimalsCountAfterDiv($rowPrice, $qty);
+
+                $this->_wryItemUnitPriceExists = $decimals > 2 ? true : false;
+            }
+
+            $sum               += $rowPrice;
+            $sumDiscountAmount += $item->getData('discount_amount');
+        }
+
+        $grandTotal     = $this->_entity->getData('grand_total');
+        $shippingAmount = $this->_entity->getData('shipping_incl_tax');
+
+        //Есть ли общая скидка на Чек. bccomp returns 0 if operands are equal
+        if (bccomp($grandTotal - $shippingAmount - $sum, 0.00, 2) !== 0) {
+            $this->generalHelper->addLog("1. Global discount on whole cheque.");
+
+            $this->spreadDiscOnAllUnits = true;
+            return true;
+        }
+
+        //ok, есть товар, который не делится нацело
+        if ($this->_wryItemUnitPriceExists) {
+            $this->generalHelper->addLog("2. Item with price which is not divisible evenly.");
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getDecimalsCountAfterDiv($x, $y)
+    {
+        $divRes   = strval(round($x / $y, 20));
+        $decimals = strrchr($divRes, ".") ? strlen(strrchr($divRes, ".")) - 1 : 0;
+
+        return $decimals;
+    }
+
+    public function getAllItems()
+    {
+        return $this->_entity->getAllVisibleItems()
+            ? $this->_entity->getAllVisibleItems()
+            : $this->_entity->getAllItems();
+    }
 }
