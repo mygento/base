@@ -7,11 +7,9 @@
 
 namespace Mygento\Base\Helper;
 
-
-
 class Discount
 {
-    const VERSION = '1.0.10';
+    const VERSION = '1.0.11';
 
     protected $generalHelper = null;
 
@@ -22,7 +20,7 @@ class Discount
 
     protected $_discountlessSum = 0.00;
 
-    /** @var bool Does item exist with price not divisible evenly? Есть ли item, цена которого не делится нацело */
+    /** Есть ли item, цена которого не делится нацело */
     protected $_wryItemUnitPriceExists = false;
 
     protected $spreadDiscOnAllUnits = null;
@@ -35,15 +33,22 @@ class Discount
         $this->generalHelper = $baseHelper;
     }
 
-    /** Returns all items of the entity (order|invoice|creditmemo) with properly calculated discount and properly calculated Sum
-     * @param $entity Mage_Sales_Model_Order | Mage_Sales_Model_Order_Invoice | Mage_Sales_Model_Order_Creditmemo
+    /** Returns all items of the entity (order|invoice|creditmemo)
+     * with properly calculated discount and properly calculated Sum
+     *
+     * @param $entity Mage_Sales_Model_Order|Mage_Sales_Model_Order_Invoice|Mage_Sales_Model_Order_Creditmemo
      * @param string $taxValue
      * @param string $taxAttributeCode Set it if info about tax is stored in product in certain attr
      * @param string $shippingTaxValue
      * @return array with calculated items and sum
      */
-    public function getRecalculated($entity, $taxValue = '', $taxAttributeCode = '', $shippingTaxValue = '', $spreadDiscOnAllUnits = false)
-    {
+    public function getRecalculated(
+        $entity,
+        $taxValue = '',
+        $taxAttributeCode = '',
+        $shippingTaxValue = '',
+        $spreadDiscOnAllUnits = false
+    ) {
         if (!$entity) {
             return;
         }
@@ -59,7 +64,9 @@ class Discount
         $this->_shippingTaxValue    = $shippingTaxValue;
         $this->spreadDiscOnAllUnits = $spreadDiscOnAllUnits;
 
-        $this->generalHelper->addLog("== START == Recalculation of entity prices. Helper Version: " . self::VERSION . ".  Entity class: " . get_class($entity) . ". Entity id: {$entity->getId()}");
+        $this->generalHelper->addLog("== START == Recalculation of entity prices. Helper Version: "
+            . self::VERSION . ".  Entity class: " . get_class($entity)
+            . ". Entity id: {$entity->getId()}");
 
         //If there is no discounts - DO NOTHING
         if ($this->checkSpread()) {
@@ -71,7 +78,9 @@ class Discount
             $this->setSimplePrices();
         }
 
-        $this->generalHelper->addLog("== STOP == Recalculation. Entity class: " . get_class($entity) . ". Entity id: {$entity->getId()}");
+        $this->generalHelper->addLog("== STOP == Recalculation. Entity class: "
+            . get_class($entity)
+            . ". Entity id: {$entity->getId()}");
 
         return $this->buildFinalArray();
     }
@@ -97,7 +106,9 @@ class Discount
             $rowTotal = $item->getData('row_total_incl_tax');
 
             //Calculate Percentage. The heart of logic.
-            $denominator   = ($this->spreadDiscOnAllUnits || ($subTotal == $this->_discountlessSum)) ? $subTotal : ($subTotal - $this->_discountlessSum);
+            $denominator   = ($this->spreadDiscOnAllUnits || ($subTotal == $this->_discountlessSum))
+                ? $subTotal
+                : ($subTotal - $this->_discountlessSum);
             $rowPercentage = $rowTotal / $denominator;
 
             if (!$this->spreadDiscOnAllUnits && (floatval($item->getDiscountAmount()) === 0.00)) {
@@ -119,15 +130,25 @@ class Discount
         //Calculate DIFF!
         $itemsSumDiff = round($this->slyFloor($grandTotal - $itemsSum - $shippingAmount, 3), 2);
 
-        $this->generalHelper->addLog("Items sum: {$itemsSum}. All Discounts: {$grandDiscount} Diff value: {$itemsSumDiff}");
+        $this->generalHelper->addLog("Items sum: {$itemsSum}. 
+            All Discounts: {$grandDiscount} 
+            Diff value: {$itemsSumDiff}");
+
         if (bccomp($itemsSumDiff, 0.00, 2) < 0) {
             //if: $itemsSumDiff < 0
-            $this->generalHelper->addLog("Notice: Sum of all items is greater than sumWithAllDiscount of entity. ItemsSumDiff: {$itemsSumDiff}");
+            $this->generalHelper->addLog(
+                "Notice: Sum of all items is greater than sumWithAllDiscount of entity. 
+                ItemsSumDiff: {$itemsSumDiff}"
+            );
+
             $itemsSumDiff = 0.0;
         }
 
         //Set Recalculated Shipping Amount
-        $this->_entity->setData(self::NAME_SHIPPING_AMOUNT, $this->_entity->getData('shipping_incl_tax') + $itemsSumDiff);
+        $this->_entity->setData(
+            self::NAME_SHIPPING_AMOUNT,
+            $this->_entity->getData('shipping_incl_tax') + $itemsSumDiff
+        );
     }
 
     /**If everything is evenly divisible - set up prices without extra recalculations
@@ -162,7 +183,9 @@ class Discount
                 continue;
             }
 
-            $taxValue   = $this->_taxAttributeCode ? $this->addTaxValue($this->_taxAttributeCode, $item) : $this->_taxValue;
+            $taxValue   = $this->_taxAttributeCode
+                ? $this->addTaxValue($this->_taxAttributeCode, $item)
+                : $this->_taxValue;
             $price      = $item->getData(self::NAME_UNIT_PRICE) ?: $item->getData('price_incl_tax');
             $entityItem = $this->_buildItem($item, $price, $taxValue);
 
@@ -176,7 +199,8 @@ class Discount
             'origGrandTotal' => floatval($grandTotal)
         ];
 
-        $shippingAmount = $this->_entity->getData(self::NAME_SHIPPING_AMOUNT) ?: $this->_entity->getData('shipping_incl_tax') + 0.00;
+        $shippingAmount = $this->_entity->getData(self::NAME_SHIPPING_AMOUNT)
+            ?: $this->_entity->getData('shipping_incl_tax') + 0.00;
 
         $shippingItem = [
             'name'     => $this->getShippingName($this->_entity),
@@ -190,7 +214,9 @@ class Discount
         $receipt['items']       = $itemsFinal;
 
         if (!$this->_checkReceipt($receipt)) {
-            $this->generalHelper->addLog("WARNING: Calculation error! Sum of items is not equal to grandTotal!");
+            $this->generalHelper->addLog(
+                "WARNING: Calculation error! Sum of items is not equal to grandTotal!"
+            );
         }
 
         $this->generalHelper->addLog("Final array:");
@@ -203,7 +229,9 @@ class Discount
     {
         $qty = $item->getQty() ?: $item->getQtyOrdered();
         if (!$qty) {
-            throw new \Exception('Divide by zero. Qty of the item is equal to zero! Item: ' . $item->getId());
+            throw new \Exception(
+                'Divide by zero. Qty of the item is equal to zero! Item: ' . $item->getId()
+            );
         }
 
         $entityItem = [
@@ -215,7 +243,12 @@ class Discount
         ];
 
         $this->generalHelper->addLog("Item calculation details:");
-        $this->generalHelper->addLog("Item id: {$item->getId()}. Orig price: {$price} Item rowTotalInclTax: {$item->getData('row_total_incl_tax')} PriceInclTax of 1 piece: {$price}. Result of calc:");
+        $this->generalHelper->addLog("
+            Item id: {$item->getId()}. 
+            Orig price: {$price} 
+            Item rowTotalInclTax: {$item->getData('row_total_incl_tax')} 
+            PriceInclTax of 1 piece: {$price}. 
+            Result of calc:");
         $this->generalHelper->addLog($entityItem);
 
         return $entityItem;
@@ -264,13 +297,13 @@ class Discount
             return '';
         }
 
-        $taxValue = $this->generalHelper->getAttributeValue($taxAttributeCode, $item->getProductId());
-
-        return $taxValue;
+        return $this->generalHelper->getAttributeValue($taxAttributeCode, $item->getProductId());
     }
 
-    /** It checks do we need to spread discount on all units and sets flag $this->spreadDiscOnAllUnits
-     * @return nothing
+    /** It checks do we need to spread discount on all units
+     * and sets flag $this->spreadDiscOnAllUnits
+     *
+     * @return boolean
      */
     public function checkSpread()
     {
@@ -329,6 +362,8 @@ class Discount
 
     public function getAllItems()
     {
-        return $this->_entity->getAllVisibleItems() ? $this->_entity->getAllVisibleItems() : $this->_entity->getAllItems();
+        return $this->_entity->getAllVisibleItems()
+            ? $this->_entity->getAllVisibleItems()
+            : $this->_entity->getAllItems();
     }
 }
