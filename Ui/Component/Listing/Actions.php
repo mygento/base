@@ -38,6 +38,7 @@ abstract class Actions extends \Magento\Ui\Component\Listing\Columns\Column
         $this->urlBuilder = $urlBuilder;
     }
 
+
     /**
      * Prepare Data Source
      *

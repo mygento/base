@@ -33,14 +33,14 @@ class Discount
         $this->generalHelper = $baseHelper;
     }
 
-    /** Returns all items of the entity (order|invoice|creditmemo)
-     * with properly calculated discount and properly calculated Sum
-     *
-     * @param $entity Mage_Sales_Model_Order|Mage_Sales_Model_Order_Invoice|Mage_Sales_Model_Order_Creditmemo
+    /**
+     * @param mixed $entity
      * @param string $taxValue
-     * @param string $taxAttributeCode Set it if info about tax is stored in product in certain attr
+     * @param string $taxAttributeCode
      * @param string $shippingTaxValue
-     * @return array with calculated items and sum
+     * @param bool $spreadDiscOnAllUnits
+     * @return array|void
+     * @throws \Exception
      */
     public function getRecalculated(
         $entity,
