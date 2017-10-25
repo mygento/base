@@ -46,8 +46,7 @@ class Discount
         $entity,
         $taxValue = '',
         $taxAttributeCode = '',
-        $shippingTaxValue = '',
-        $spreadDiscOnAllUnits = false
+        $shippingTaxValue = ''
     ) {
         if (!$entity) {
             return;
