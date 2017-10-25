@@ -46,7 +46,8 @@ class Discount
         $entity,
         $taxValue = '',
         $taxAttributeCode = '',
-        $shippingTaxValue = ''
+        $shippingTaxValue = '',
+        $spreadDiscOnAllUnits = false
     ) {
         if (!$entity) {
             return;
@@ -368,12 +369,4 @@ class Discount
             ? $this->_entity->getAllVisibleItems()
             : $this->_entity->getAllItems();
     }
-
-    /**Force to spread discount on all units even it is not necessary
-     * @param bool $spread
-     */
-//    public function spreadDiscountOnAllUnits($spread)
-//    {
-//        $this->spreadDiscOnAllUnits = boolval($spread);
-//    }
 }
