@@ -21,7 +21,7 @@ class Discount
     protected $_discountlessSum = 0.00;
 
     /** Есть ли item, цена которого не делится нацело */
-    protected $_wryItemUnitPriceExists = false;
+    protected $_wryPriceExists = false;
 
     protected $spreadDiscOnAllUnits = null;
 
@@ -46,8 +46,7 @@ class Discount
         $entity,
         $taxValue = '',
         $taxAttributeCode = '',
-        $shippingTaxValue = '',
-        $spreadDiscOnAllUnits = false
+        $shippingTaxValue = ''
     ) {
         if (!$entity) {
             return;
@@ -62,27 +61,30 @@ class Discount
         $this->_taxValue            = $taxValue;
         $this->_taxAttributeCode    = $taxAttributeCode;
         $this->_shippingTaxValue    = $shippingTaxValue;
-        $this->spreadDiscOnAllUnits = $spreadDiscOnAllUnits;
 
         $this->generalHelper->addLog("== START == Recalculation of entity prices. Helper Version: "
             . self::VERSION . ".  Entity class: " . get_class($entity)
             . ". Entity id: {$entity->getId()}");
 
-        //If there is no discounts - DO NOTHING
-        if ($this->checkSpread()) {
-            $this->applyDiscount();
-        } else {
-            //Это случай, когда не нужно размазывать копейки по позициям
-            //и при этом, позиции могут иметь скидки, равномерно делимые.
-
-            $this->setSimplePrices();
-        }
+        $this->runCalculation();
 
         $this->generalHelper->addLog("== STOP == Recalculation. Entity class: "
             . get_class($entity)
             . ". Entity id: {$entity->getId()}");
 
         return $this->buildFinalArray();
+    }
+
+    protected function runCalculation()
+    {
+        if ($this->checkSpread()) {
+            $this->applyDiscount();
+
+            return;
+        }
+        //Это случай, когда не нужно размазывать копейки по позициям
+        //и при этом, позиции могут иметь скидки, равномерно делимые.
+        $this->setSimplePrices();
     }
 
     public function applyDiscount()
@@ -201,9 +203,15 @@ class Discount
 
         $shippingAmount = $this->_entity->getData(self::NAME_SHIPPING_AMOUNT)
             ?: $this->_entity->getData('shipping_incl_tax') + 0.00;
+        $shippingName   = $this->_entity->getShippingDescription()
+            ?: (
+            $this->_entity->getOrder()
+                ? $this->_entity->getOrder()->getShippingDescription()
+                : ''
+            );
 
         $shippingItem = [
-            'name'     => $this->getShippingName($this->_entity),
+            'name'     => $shippingName,
             'price'    => $shippingAmount,
             'quantity' => 1.0,
             'sum'      => $shippingAmount,
@@ -252,12 +260,6 @@ class Discount
         $this->generalHelper->addLog($entityItem);
 
         return $entityItem;
-    }
-
-    public function getShippingName($entity)
-    {
-        return $entity->getShippingDescription()
-            ?: ($entity->getOrder() ? $entity->getOrder()->getShippingDescription() : '');
     }
 
     /**Validation method. It sums up all items and compares it to grandTotal.
@@ -321,10 +323,10 @@ class Discount
             }
 
             /* Означает, что есть item, цена которого не делится нацело*/
-            if (!$this->_wryItemUnitPriceExists) {
+            if (!$this->_wryPriceExists) {
                 $decimals = $this->getDecimalsCountAfterDiv($rowPrice, $qty);
 
-                $this->_wryItemUnitPriceExists = $decimals > 2 ? true : false;
+                $this->_wryPriceExists = $decimals > 2 ? true : false;
             }
 
             $sum               += $rowPrice;
@@ -343,7 +345,7 @@ class Discount
         }
 
         //ok, есть товар, который не делится нацело
-        if ($this->_wryItemUnitPriceExists) {
+        if ($this->_wryPriceExists) {
             $this->generalHelper->addLog("2. Item with price which is not divisible evenly.");
 
             return true;
@@ -352,9 +354,9 @@ class Discount
         return false;
     }
 
-    public function getDecimalsCountAfterDiv($x, $y)
+    public function getDecimalsCountAfterDiv($numerator, $denominator)
     {
-        $divRes   = strval(round($x / $y, 20));
+        $divRes   = strval(round($numerator / $denominator, 20));
         $decimals = strrchr($divRes, ".") ? strlen(strrchr($divRes, ".")) - 1 : 0;
 
         return $decimals;
