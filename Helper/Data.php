@@ -205,7 +205,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttributeValue($attributeCode, $productId)
     {
         $product = $this->getProduct($productId);
-        $value   = $product->getAttributeText($attributeCode) ?: $product->getData($attributeCode);
+        $value   = !is_null($product->getAttributeText($attributeCode)) ? 
+            $product->getAttributeText($attributeCode) : 
+            $product->getData($attributeCode);
 
         return $value;
     }
