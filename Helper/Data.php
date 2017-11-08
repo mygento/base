@@ -66,7 +66,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function addLog($text)
     {
-        if (!$this->getConfig('debug')) {
+        if (!$this->getConfig($this->getDebugConfigPath())) {
             return;
         }
 
@@ -98,6 +98,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $configPath,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * @return string like 'smsmodule/general/debug'
+     */
+    protected function getDebugConfigPath()
+    {
+        return $this->_code . '/general/debug';
     }
 
     public function getProduct($productId)
@@ -184,22 +192,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCode()
     {
         return $this->_code;
-    }
-
-    /**Fetch attribute code from $pathToParam and then get it from product
-     * @param $pathToParam config path like module/general/param
-     * @param $productId
-     *
-     * @return mixed attribute value
-     */
-    public function getAttrValueByParam($pathToParam, $productId)
-    {
-        $attributeCode = $this->getConfig($pathToParam);
-        if (!$attributeCode || '0' == $attributeCode || 0 === $attributeCode) {
-            return $this->getConfig($pathToParam . '_default');
-        }
-
-        return $this->getAttributeValue($attributeCode, $productId);
     }
 
     public function getAttributeValue($attributeCode, $productId)
