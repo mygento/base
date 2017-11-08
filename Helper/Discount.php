@@ -189,7 +189,9 @@ class Discount
             $taxValue   = $this->_taxAttributeCode
                 ? $this->addTaxValue($this->_taxAttributeCode, $item)
                 : $this->_taxValue;
-            $price      = !is_null($item->getData(self::NAME_UNIT_PRICE)) ? $item->getData(self::NAME_UNIT_PRICE) : $item->getData('price_incl_tax');
+            $price      = $item->getData(self::NAME_UNIT_PRICE) !== null
+                ? $item->getData(self::NAME_UNIT_PRICE)
+                : $item->getData('price_incl_tax');
             $entityItem = $this->_buildItem($item, $price, $taxValue);
 
             $itemsFinal[$item->getId()] = $entityItem;
