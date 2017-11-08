@@ -9,7 +9,7 @@ namespace Mygento\Base\Helper;
 
 class Discount
 {
-    const VERSION = '1.0.11';
+    const VERSION = '1.0.12';
 
     protected $generalHelper = null;
 
@@ -79,19 +79,20 @@ class Discount
     {
         if ($this->checkSpread()) {
             $this->applyDiscount();
-
+            $this->generalHelper->addLog("'Apply Discount' logic was applied");
             return;
         }
         //Это случай, когда не нужно размазывать копейки по позициям
         //и при этом, позиции могут иметь скидки, равномерно делимые.
         $this->setSimplePrices();
+        $this->generalHelper->addLog("'Simple prices' logic was applied");
     }
 
     public function applyDiscount()
     {
         $subTotal       = $this->_entity->getData('subtotal_incl_tax');
         $shippingAmount = $this->_entity->getData('shipping_incl_tax');
-        $grandTotal     = $this->_entity->getData('grand_total');
+        $grandTotal     = round($this->_entity->getData('grand_total'), 2);
         $grandDiscount  = $grandTotal - $subTotal - $shippingAmount;
 
         $percentageSum = 0;
@@ -175,7 +176,7 @@ class Discount
 
     public function buildFinalArray()
     {
-        $grandTotal = $this->_entity->getData('grand_total');
+        $grandTotal = round($this->_entity->getData('grand_total'), 2);
 
         $items      = $this->getAllItems();
         $itemsFinal = [];
@@ -188,7 +189,7 @@ class Discount
             $taxValue   = $this->_taxAttributeCode
                 ? $this->addTaxValue($this->_taxAttributeCode, $item)
                 : $this->_taxValue;
-            $price      = $item->getData(self::NAME_UNIT_PRICE) ?: $item->getData('price_incl_tax');
+            $price      = !is_null($item->getData(self::NAME_UNIT_PRICE)) ? $item->getData(self::NAME_UNIT_PRICE) : $item->getData('price_incl_tax');
             $entityItem = $this->_buildItem($item, $price, $taxValue);
 
             $itemsFinal[$item->getId()] = $entityItem;
@@ -333,7 +334,7 @@ class Discount
             $sumDiscountAmount += $item->getData('discount_amount');
         }
 
-        $grandTotal     = $this->_entity->getData('grand_total');
+        $grandTotal     = round($this->_entity->getData('grand_total'), 2);
         $shippingAmount = $this->_entity->getData('shipping_incl_tax');
 
         //Есть ли общая скидка на Чек. bccomp returns 0 if operands are equal
