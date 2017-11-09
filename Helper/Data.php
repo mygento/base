@@ -215,4 +215,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_urlBuilder->getUrl($route, $params);
     }
+
+    /**
+     * Force convert to float
+     *
+     * @param mixed $value
+     * @return  float
+     */
+    public function formatToNumber($value)
+    {
+        $value = floatval(str_replace(
+            [' ', ','],
+            ['', '.'],
+            $value
+        ));
+        return $value;
+    }
 }
