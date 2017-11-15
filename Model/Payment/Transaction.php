@@ -12,7 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 class Transaction extends \Magento\Sales\Model\Order\Payment\Transaction
 {
     const TYPE_FISCAL = 'fiscal_receipt';
-    const TYPE_FISCAL_REFUND = 'fiscal_receipt_refund';
+    const TYPE_FISCAL_REFUND = 'fiscal_refund';
 
     /**
      * Check whether specified or set transaction type is supported

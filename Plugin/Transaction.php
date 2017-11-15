@@ -13,14 +13,14 @@ class Transaction
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      */
-    
+
     public function afterGetTransactionTypes(
         \Magento\Sales\Model\Order\Payment\Transaction $subject,
         $result
     ) {
         return array_merge($result, [
             'fiscal_receipt' => __('Fiscal receipt'),
-            'fiscal_receipt_refund' => __('Fiscal receipt refund'),
+            'fiscal_refund' => __('Fiscal receipt refund'),
         ]);
     }
 }
