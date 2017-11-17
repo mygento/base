@@ -105,7 +105,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function getDebugConfigPath()
     {
-        return $this->_code . '/general/debug';
+        $code = $this->_code === 'mygento' ? 'mygento_base' : $this->_code;
+        return $code . '/general/debug';
     }
 
     public function getProduct($productId)

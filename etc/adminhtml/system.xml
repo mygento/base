@@ -19,6 +19,14 @@
                 <label>Extensions and Support</label>
                 <frontend_model>Mygento\Base\Block\Extensions</frontend_model>
             </group>
+            <group id="general" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Setting</label>
+                <field id="debug" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>All built-in methods of Mygento_Base module will write log</comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>
