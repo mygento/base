@@ -195,6 +195,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_code;
     }
 
+    /**
+     * Fetch attribute code from $pathToParam and then get it from product
+     * @param $pathToParam config path like module/general/param
+     * @param $productId
+     *
+     * @return mixed attribute value
+     */
+    public function getAttrValueByParam($pathToParam, $productId)
+    {
+        $attributeCode = $this->getConfig($pathToParam);
+        if (!$attributeCode || '0' == $attributeCode || 0 === $attributeCode) {
+            return $this->getConfig($pathToParam . '_default');
+        }
+
+        return $this->getAttributeValue($attributeCode, $productId);
+    }
+
     public function getAttributeValue($attributeCode, $productId)
     {
         $product = $this->getProduct($productId);
