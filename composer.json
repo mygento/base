@@ -1,7 +1,7 @@
 {
   "name": "mygento/base",
   "type": "magento2-module",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "license": "OSL-3.0",
   "homepage": "https://github.com/mygento/base",
   "description": "Mygento Base",
