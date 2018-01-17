@@ -193,11 +193,12 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         $dir = $this->moduleReader->getModuleDir('', $moduleCode);
         $file = $dir . DIRECTORY_SEPARATOR . 'composer.json';
-
-        $string = $this->filesystem->fileGetContents($file);
-        $json = $this->jsonDecoder->decode($string);
-
-        return $json;
+        try {
+            $string = $this->filesystem->fileGetContents($file);
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
+            return null;
+        }
+        return $this->jsonDecoder->decode($string);
     }
 
     /**
