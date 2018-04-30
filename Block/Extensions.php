@@ -108,18 +108,6 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             $email = 'connect@mygento.ru';
         }
 
-        $ticketUrl = "mailto:support@mygento.ru";
-        $url = __(
-            'Purchased extensions support is available through '
-            . '<a href="%1" target="_blank">ticket tracking system</a>',
-            $ticketUrl
-        );
-        $bugs = __('Please report all bugs and feature requests.');
-        $emailtext = __(
-            'If for some reasons you can not submit ticket '
-            . 'to our system, you can write us an email %1.',
-            $email
-        );
         $hiretext = __(
             'You can hire us for any Magento extension customization and development.'
             . '<br/>Write us to %1',
@@ -135,7 +123,7 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             '<br/><br/>' . $emailtext . '</td></tr>';
         $html .= '<tr><td>' . __('License') . ':</td><td>' . $tender . '</td></tr>';
         $html .= '<tr class="mygento-info-line "><td>'
-            . '<img src="//www.mygento.ru/media/wysiwyg/logo_base.png" width="100" height="100"/>'
+            . '<img src="//www.mygento.ru/img/mygento.svg" width="100" height="100" alt="mygento logo"/>'
             . '</td><td>' . $hiretext . '<br/><br/>' . __(
                 'You can check all providable services on '
                 . '<a href="%1" target="_blank">our website</a>.',
