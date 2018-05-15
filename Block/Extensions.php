@@ -114,16 +114,14 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
             $email
         );
         $tender = __('Tender offer can be checked '
-            . '<a href="https://www.mygento.ru/oferta" target="_blank">here</a>');
+            . '<a href="%1/oferta" target="_blank">here</a>', $site);
 
         $html .= '<table class="mygento-info" cellspacing="0" cellpading="0">'
             . '<tr class="mygento-info-line">';
-        $html .= '<tr><td>' . __('Support') . ':</td>' .
-            '<td>' . $url . '.<br/><br/>' . $bugs .
-            '<br/><br/>' . $emailtext . '</td></tr>';
         $html .= '<tr><td>' . __('License') . ':</td><td>' . $tender . '</td></tr>';
         $html .= '<tr class="mygento-info-line "><td>'
-            . '<img src="//www.mygento.ru/img/mygento.svg" width="100" height="100" alt="mygento logo"/>'
+            . '<img src="//www.mygento.ru/img/mygento.svg" '
+            . 'width="100" height="100" alt="mygento logo"/>'
             . '</td><td>' . $hiretext . '<br/><br/>' . __(
                 'You can check all providable services on '
                 . '<a href="%1" target="_blank">our website</a>.',
