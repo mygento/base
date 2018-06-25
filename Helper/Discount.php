@@ -375,9 +375,7 @@ class Discount
     public function getVATAmount($price, $VATValue)
     {
         $priceWithoutVat = $price / (1 + $VATValue / 100);
-
         $vatAmount = round($price - $priceWithoutVat, 2);
-
         return $vatAmount;
     }
 }
