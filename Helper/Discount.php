@@ -474,11 +474,9 @@ class Discount
     {
         $final = [];
 
-        $taxValue = $this->_taxAttributeCode ? $this->addTaxValue(
-            $this->_taxAttributeCode,
-            $this->_entity,
-            $item
-        ) : $this->_taxValue;
+        $taxValue = $this->_taxAttributeCode
+            ? $this->addTaxValue($this->_taxAttributeCode, $item)
+            : $this->_taxValue;
         $price = !($item->getData(self::NAME_UNIT_PRICE) === null)
             ? $item->getData(self::NAME_UNIT_PRICE)
             : $item->getData('price_incl_tax');
@@ -587,7 +585,7 @@ class Discount
         return (ceil(abs($val) * $divider) / $divider) * $factor;
     }
 
-    protected function addTaxValue($taxAttributeCode, $entity, $item)
+    protected function addTaxValue($taxAttributeCode, $item)
     {
         if (!$taxAttributeCode) {
             return '';
