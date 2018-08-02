@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @author Mygento
- * @copyright See COPYING.txt for license details.
+ * @author Mygento Team
+ * @copyright 2016-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
@@ -90,6 +91,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      *
      * @param string $config_path
+     * @param mixed $configPath
      * @return string
      */
     public function getConfig($configPath)
@@ -125,7 +127,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         // @codingStandardsIgnoreStart
         $curlh = curl_init();
-        curl_setopt($curlh, CURLOPT_URL, $url . "?" . http_build_query($data));
+        curl_setopt($curlh, CURLOPT_URL, $url . '?' . http_build_query($data));
         curl_setopt($curlh, CURLOPT_POST, false);
         curl_setopt($curlh, CURLOPT_HEADER, 0);
         curl_setopt($curlh, CURLOPT_RETURNTRANSFER, true);

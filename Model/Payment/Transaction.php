@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @author Mygento
- * @copyright See COPYING.txt for license details.
+ * @author Mygento Team
+ * @copyright 2016-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
@@ -18,8 +19,8 @@ class Transaction extends \Magento\Sales\Model\Order\Payment\Transaction
      * Check whether specified or set transaction type is supported
      *
      * @param string $txnType
-     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _verifyTxnType($txnType = null)

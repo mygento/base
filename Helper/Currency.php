@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @author Mygento
- * @copyright See COPYING.txt for license details.
+ * @author Mygento Team
+ * @copyright 2016-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
@@ -47,8 +48,8 @@ class Currency extends AbstractHelper
      * @param $amountValue
      * @param null $currencyCodeFrom
      * @param null $currencyCodeTo
-     * @return float|int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return float|int
      */
     public function convert($amountValue, $currencyCodeFrom = null, $currencyCodeTo = null)
     {

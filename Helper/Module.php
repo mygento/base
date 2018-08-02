@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @author Mygento
- * @copyright See COPYING.txt for license details.
+ * @author Mygento Team
+ * @copyright 2016-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
@@ -12,5 +13,4 @@ namespace Mygento\Base\Helper;
  */
 class Module extends \Magento\Framework\App\Helper\AbstractHelper
 {
-
 }

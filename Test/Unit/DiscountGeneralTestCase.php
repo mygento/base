@@ -1,10 +1,16 @@
 <?php
 
+/**
+ * @author Mygento Team
+ * @copyright 2016-2018 Mygento (https://www.mygento.ru)
+ * @package Mygento_Base
+ */
+
 namespace Mygento\Base\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__.'/bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 /**
  *
@@ -77,7 +83,7 @@ class DiscountGeneralTestCase extends TestCase
     {
         //beautify output
         echo "\033[1;31m"; // light red
-        echo "\t".$e->getMessage()."\n";
+        echo "\t" . $e->getMessage() . "\n";
         echo "\033[0m"; //reset color
 
         throw $e;
@@ -85,13 +91,15 @@ class DiscountGeneralTestCase extends TestCase
 
     /**
      * @SuppressWarnings(PHPMD.ExitExpression)
+     * @param mixed $order
+     * @param mixed $expectedArray
      */
     public function testCalculation($order, $expectedArray)
     {
         //В случае если добавили новый тест и у него еще нет expectedArray - то выводим его с соотв. округлением значений
         if (is_null($expectedArray)) {
             echo "\033[1;32m"; // green
-            echo $this->getName().PHP_EOL;
+            echo $this->getName() . PHP_EOL;
             echo "\033[1;33m"; // yellow
             $storedValue = ini_get('serialize_precision');
             ini_set('serialize_precision', 12);
@@ -156,11 +164,10 @@ class DiscountGeneralTestCase extends TestCase
         $order->setData('all_items', $items);
     }
 
-
     public function getRandomString($len, $chars = null)
     {
         if (is_null($chars)) {
-            $chars = self::CHARS_LOWERS.self::CHARS_UPPERS.self::CHARS_DIGITS;
+            $chars = self::CHARS_LOWERS . self::CHARS_UPPERS . self::CHARS_DIGITS;
         }
         for ($i = 0, $str = '', $lc = strlen($chars) - 1; $i < $len; $i++) {
             $str .= $chars[mt_rand(0, $lc)];
@@ -168,7 +175,6 @@ class DiscountGeneralTestCase extends TestCase
 
         return $str;
     }
-
 
     /**
      * @return array
