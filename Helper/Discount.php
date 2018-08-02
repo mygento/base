@@ -301,6 +301,10 @@ class Discount
 
         $lostDiscount = round($grandTotal - $shippingAmount - $newItemsSum, 2);
 
+        if ($lostDiscount === 0 || $lostDiscount === 0.00) {
+            return 0;
+        }
+
         $sign  = $lostDiscount / abs($lostDiscount);
         $i     = abs($lostDiscount) * 100;
         $count = count($items);

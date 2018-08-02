@@ -14,8 +14,7 @@
     },
     {
       "name": "Mygento",
-      "email": "connect@mygento.net",
-      "homepage": "https://www.mygento.ru/"
+      "email": "connect@mygento.net"
     }
   ],
   "keywords": [
@@ -32,7 +31,8 @@
   "require-dev": {
     "mygento/coding-standard": "2.*",
     "jakub-onderka/php-parallel-lint": "^0.9.2",
-    "jakub-onderka/php-console-highlighter": "^0.3.2"
+    "jakub-onderka/php-console-highlighter": "^0.3.2",
+    "phpunit/PHPUnit": "^7.2"
   },
   "autoload": {
     "files": [
