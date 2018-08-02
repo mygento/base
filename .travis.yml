@@ -16,6 +16,7 @@ script:
 - find . -path ./vendor -prune -o -name '*.xml' -print | xargs xmllint --noout
 - php vendor/bin/phpcs .
 - php vendor/bin/phpmd . text vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml --exclude vendor
+- php vendor/bin/phpunit ./Test/Unit/
 
 env:
   global:
