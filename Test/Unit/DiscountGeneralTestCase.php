@@ -38,6 +38,8 @@ class DiscountGeneralTestCase extends TestCase
     const TEST_CASE_NAME_15 = '#case 15. Тест 2 на мелкие rewardPoints (0.31)';
     const TEST_CASE_NAME_16 = '#case 16. Тест 1 на мелкие rewardPoints (9.99)';
     const TEST_CASE_NAME_17 = '#case 17. гипотетическая ситуация с ошибкой расчета Мagento -1 коп.';
+    const TEST_CASE_NAME_18 = '#case 18. Подарочная карта. Полная оплата';
+    const TEST_CASE_NAME_19 = '#case 19. Store Credit. Частичная оплата';
 
     const CHARS_LOWERS   = 'abcdefghijklmnopqrstuvwxyz';
     const CHARS_UPPERS   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -347,6 +349,23 @@ class DiscountGeneralTestCase extends TestCase
         $this->addItem($order, $this->getItem(5000.0000, 50.0000, 5000.0000, 100.0000));
         $this->addItem($order, $this->getItem(7990.0000, 7990.0000, 0, 1.0000));
         $final[self::TEST_CASE_NAME_17] = $order;
+
+        //Оплата Подарочной картой или Store Credit - должна в налоговую быть предоставленой как обычное поступление средств
+        //Gift Card - полная оплата
+        $order = $this->getNewOrderInstance(1500.0000, 0.0000, 0.0000);
+        $order->setData('discount_amount', 0);
+        $order->setData('gift_cards_amount', 1500);
+        $this->addItem($order, $this->getItem(1000.0000, 1000.0000, 0, 1));
+        $this->addItem($order, $this->getItem(500.0000, 500.0000, 0, 1.0000));
+        $final[self::TEST_CASE_NAME_18] = $order;
+
+        //Store Credit - частичная оплата
+        $order = $this->getNewOrderInstance(1500.0000, 1000.0000, 0.0000);
+        $order->setData('discount_amount', 0);
+        $order->setData('customer_balance_amount', 500);
+        $this->addItem($order, $this->getItem(1000.0000, 1000.0000, 0, 1));
+        $this->addItem($order, $this->getItem(500.0000, 500.0000, 0, 1.0000));
+        $final[self::TEST_CASE_NAME_19] = $order;
 
         return $final;
     }

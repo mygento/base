@@ -747,6 +747,36 @@ class DiscountWithoutCalcTest extends DiscountGeneralTestCase
                 ],
         ];
 
+        $actualData[parent::TEST_CASE_NAME_18] = [
+            'sum'            => 1500.0,
+            'origGrandTotal' => 1500.0,
+            'items'          => [
+                    0          => [
+                            'price'    => 1,
+                            'name'     => 'xvLe17zk',
+                            'quantity' => 1.0,
+                            'sum'      => 1000.0,
+                            'tax'      => 'vat18',
+                        ],
+                    1          => [
+                            'price'    => 1,
+                            'name'     => 'y4q9piJk',
+                            'quantity' => 1.0,
+                            'sum'      => 500.0,
+                            'tax'      => 'vat18',
+                        ],
+                    'shipping' => [
+                            'name'     => '',
+                            'price'    => 0.0,
+                            'quantity' => 1.0,
+                            'sum'      => 0.0,
+                            'tax'      => '',
+                        ],
+                ],
+        ];
+
+        $actualData[parent::TEST_CASE_NAME_19] = $actualData[parent::TEST_CASE_NAME_18];
+
         return $actualData;
     }
 }

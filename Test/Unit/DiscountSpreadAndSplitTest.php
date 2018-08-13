@@ -1190,6 +1190,36 @@ class DiscountSpreadAndSplitTest extends DiscountGeneralTestCase
                 ],
         ];
 
+        $actualData[parent::TEST_CASE_NAME_18] = [
+            'sum'            => 1500.0,
+            'origGrandTotal' => 1500.0,
+            'items'          => [
+                    0          => [
+                            'price'    => 1000.0,
+                            'name'     => 'WQPsnwpZ',
+                            'quantity' => 1.0,
+                            'sum'      => 1000.0,
+                            'tax'      => 'vat18',
+                        ],
+                    1          => [
+                            'price'    => 500.0,
+                            'name'     => 'xN7k7d5b',
+                            'quantity' => 1.0,
+                            'sum'      => 500.0,
+                            'tax'      => 'vat18',
+                        ],
+                    'shipping' => [
+                            'name'     => '',
+                            'price'    => 0.0,
+                            'quantity' => 1.0,
+                            'sum'      => 0.0,
+                            'tax'      => '',
+                        ],
+                ],
+        ];
+
+        $actualData[parent::TEST_CASE_NAME_19] = $actualData[parent::TEST_CASE_NAME_18];
+
         return $actualData;
     }
 }

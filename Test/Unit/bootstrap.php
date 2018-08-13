@@ -10,7 +10,12 @@ namespace Mygento\Base\Test\Unit;
 
 // @codingStandardsIgnoreStart
 chdir(__DIR__);
-require_once './../../vendor/autoload.php';
+$autoloadFilePath = './../../vendor/autoload.php';
+
+//To run tests inside / outside Magento
+require_once file_exists($autoloadFilePath)
+    ? $autoloadFilePath
+    : './../../../../autoload.php';
 
 ini_set('display_errors', 1);
 // @codingStandardsIgnoreEnd

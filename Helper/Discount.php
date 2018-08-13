@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order\Invoice;
  */
 class Discount
 {
-    const VERSION         = '1.0.15';
+    const VERSION         = '1.0.16';
     const NAME_UNIT_PRICE = 'disc_hlpr_price';
     const NAME_ROW_DIFF   = 'recalc_row_diff';
 
@@ -689,14 +689,11 @@ class Discount
 
     protected function getGrandTotal()
     {
-        return $this->_entity->getData('grand_total');
-
-        //"Workaround to use GiftCards not approved yet"
-        /*return round(
-            $this->_entity->getData('grand_total') + $this->_entity->getData(
-                'gift_cards_amount'
-            ),
+        return round(
+            $this->_entity->getData('grand_total')
+            + $this->_entity->getData('gift_cards_amount')
+            + $this->_entity->getData('customer_balance_amount'),
             2
-        );*/
+        );
     }
 }
