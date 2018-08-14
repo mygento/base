@@ -2,7 +2,7 @@
 
 /**
  * @author Mygento Team
- * @copyright 2016-2018 Mygento (https://www.mygento.ru)
+ * @copyright 2014-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
@@ -785,6 +785,36 @@ class DiscountAffectsShippingTest extends DiscountGeneralTestCase
                         ],
                 ],
         ];
+
+        $actualData[parent::TEST_CASE_NAME_18] = [
+            'sum'            => 1500.0,
+            'origGrandTotal' => 1500.0,
+            'items'          => [
+                    0          => [
+                            'price'    => 1000.0,
+                            'name'     => '4hhM1Zad',
+                            'quantity' => 1.0,
+                            'sum'      => 1000.0,
+                            'tax'      => 'vat18',
+                        ],
+                    1          => [
+                            'price'    => 500.0,
+                            'name'     => 'nWllUitS',
+                            'quantity' => 1.0,
+                            'sum'      => 500.0,
+                            'tax'      => 'vat18',
+                        ],
+                    'shipping' => [
+                            'name'     => '',
+                            'price'    => 0.0,
+                            'quantity' => 1.0,
+                            'sum'      => 0.0,
+                            'tax'      => '',
+                        ],
+                ],
+        ];
+
+        $actualData[parent::TEST_CASE_NAME_19] = $actualData[parent::TEST_CASE_NAME_18];
 
         return $actualData;
     }

@@ -16,6 +16,6 @@ parameters:
       ruleset: ['vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml']
     phpcs:
       warning_severity: null
-    #phpunit:
-      #testsuite: 'Test'
+    phpunit:
+      testsuite: 'Test'
     xmllint:
