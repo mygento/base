@@ -10,8 +10,6 @@ namespace Mygento\Base\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/bootstrap.php';
-
 /**
  *
  * @category Mygento
