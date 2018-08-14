@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @author Mygento
- * @copyright See COPYING.txt for license details.
+ * @author Mygento Team
+ * @copyright 2014-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
@@ -12,6 +13,7 @@ class Transaction
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
+     * @param mixed $result
      */
 
     public function afterGetTransactionTypes(

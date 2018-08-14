@@ -10,12 +10,10 @@ before_script:
 - phpenv config-rm xdebug.ini
 - composer install --no-interaction --prefer-dist
 - php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
+- php vendor/bin/phpcs --config-set show_warnings 0
 
 script:
-- php vendor/bin/parallel-lint --exclude vendor .
-- find . -path ./vendor -prune -o -name '*.xml' -print | xargs xmllint --noout
-- php vendor/bin/phpcs .
-- php vendor/bin/phpmd . text vendor/mygento/coding-standard/Mygento-Mage2/phpmd.xml --exclude vendor
+- php vendor/bin/grumphp run
 
 env:
   global:

@@ -1,16 +1,17 @@
 <?php
+
 /**
- * @author Mygento
- * @copyright See COPYING.txt for license details.
+ * @author Mygento Team
+ * @copyright 2014-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
 namespace Mygento\Base\Model\Config\Backend;
 
+use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -75,7 +76,6 @@ class File extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-
         parent::__construct(
             $context,
             $registry,
@@ -94,8 +94,8 @@ class File extends \Magento\Framework\App\Config\Value
     /**
      * Save uploaded file before saving config value
      *
-     * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @return $this
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function beforeSave()
@@ -148,7 +148,7 @@ class File extends \Magento\Framework\App\Config\Value
             $file['name'] = $this->_requestData->getName($this->getPath());
         } elseif (!empty($value['tmp_name'])) {
             $file['tmp_name'] = $value['tmp_name'];
-            $file['name'] = isset($value['value']) ? $value['value'] : $value['name'];
+            $file['name'] = $value['value'] ?? $value['name'];
         }
 
         return $file;
@@ -158,8 +158,8 @@ class File extends \Magento\Framework\App\Config\Value
      * Validation callback for checking max file size
      *
      * @param  string $filePath Path to temporary uploaded file
-     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
      */
     public function validateMaxSize($filePath)
     {
@@ -195,8 +195,8 @@ class File extends \Magento\Framework\App\Config\Value
     /**
      * Return path to directory for upload file
      *
-     * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @return string
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     protected function _getUploadDir()

@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @author Mygento
- * @copyright See COPYING.txt for license details.
+ * @author Mygento Team
+ * @copyright 2014-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
@@ -9,7 +10,6 @@ namespace Mygento\Base\Ui\Component\Listing;
 
 abstract class Actions extends \Magento\Ui\Component\Listing\Columns\Column
 {
-
     protected $route = '*';
     protected $controller = '*';
     protected $key = 'id';
@@ -52,7 +52,7 @@ abstract class Actions extends \Magento\Ui\Component\Listing\Columns\Column
                     $item[$this->getData('name')] = [
                         'edit' => [
                             'href' => $this->urlBuilder->getUrl(
-                                $this->route.'/'.$this->controller.'/edit',
+                                $this->route . '/' . $this->controller . '/edit',
                                 [
                                     'id' => $item[$this->key]
                                 ]
@@ -61,7 +61,7 @@ abstract class Actions extends \Magento\Ui\Component\Listing\Columns\Column
                         ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
-                                $this->route.'/'.$this->controller.'/delete',
+                                $this->route . '/' . $this->controller . '/delete',
                                 [
                                     'id' => $item[$this->key]
                                 ]

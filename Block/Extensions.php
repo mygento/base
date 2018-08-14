@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @author Mygento
- * @copyright See COPYING.txt for license details.
+ * @author Mygento Team
+ * @copyright 2014-2018 Mygento (https://www.mygento.ru)
  * @package Mygento_Base
  */
 
@@ -172,8 +173,8 @@ class Extensions extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Read info about extension from composer json file
      * @param $moduleCode
-     * @return mixed
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @return mixed
      */
     protected function _getModuleInfo($moduleCode)
     {
