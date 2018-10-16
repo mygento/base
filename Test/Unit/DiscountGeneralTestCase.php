@@ -38,6 +38,7 @@ class DiscountGeneralTestCase extends TestCase
     const TEST_CASE_NAME_17 = '#case 17. гипотетическая ситуация с ошибкой расчета Мagento -1 коп.';
     const TEST_CASE_NAME_18 = '#case 18. Подарочная карта. Полная оплата';
     const TEST_CASE_NAME_19 = '#case 19. Store Credit. Частичная оплата';
+    const TEST_CASE_NAME_20 = '#case 20. Bug with negative Qty';
 
     const CHARS_LOWERS   = 'abcdefghijklmnopqrstuvwxyz';
     const CHARS_UPPERS   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -364,6 +365,13 @@ class DiscountGeneralTestCase extends TestCase
         $this->addItem($order, $this->getItem(1000.0000, 1000.0000, 0, 1));
         $this->addItem($order, $this->getItem(500.0000, 500.0000, 0, 1.0000));
         $final[self::TEST_CASE_NAME_19] = $order;
+
+        //Стоимость доставки 315 Р надо распределить по товарам.
+        $order = $this->getNewOrderInstance(14356.6000, 14671.6000, 0.0000, -315.0000);
+        $this->addItem($order, $this->getItem(5600.0000, 1120.0000, 0.0000, 5.0000));
+        $this->addItem($order, $this->getItem(8225.1000, 2741.7000, 0.0000, 3.0000));
+        $this->addItem($order, $this->getItem(531.5000, 531.5000, 0.0000, 1.0000));
+        $final[self::TEST_CASE_NAME_20] = $order;
 
         return $final;
     }
