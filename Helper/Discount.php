@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order\Invoice;
  */
 class Discount
 {
-    const VERSION         = '1.0.16';
+    const VERSION         = '1.0.17';
     const NAME_UNIT_PRICE = 'disc_hlpr_price';
     const NAME_ROW_DIFF   = 'recalc_row_diff';
 
@@ -294,8 +294,9 @@ class Discount
         $newItemsSum = 0;
         $rowDiffSum  = 0;
         foreach ($items as $item) {
-            $rowTotalNew = $item->getData(self::NAME_UNIT_PRICE) * $item->getQty(
-            ) + ($item->getData(self::NAME_ROW_DIFF) / 100);
+            $qty         = $item->getQty() ?: $item->getQtyOrdered();
+            $rowTotalNew = $item->getData(self::NAME_UNIT_PRICE) * $qty
+                + ($item->getData(self::NAME_ROW_DIFF) / 100);
             $rowDiffSum  += $item->getData(self::NAME_ROW_DIFF);
             $newItemsSum += $rowTotalNew;
         }
@@ -498,10 +499,11 @@ class Discount
 
         $qty = $item->getQty() ?: $item->getQtyOrdered();
 
-        /** @var int $qtyUpdate Сколько товаров из ряда нуждаются в увеличении цены
+        /** @var int $qtyUpdate Сколько товаров из ряда нуждаются в изменении цены
          *  Если $qtyUpdate =0 - то цена всех товаров должна быть увеличина
          */
-        $qtyUpdate = $rowDiff % $qty;
+        $qtyUpdate = abs($rowDiff % $qty);
+        $sign = abs($rowDiff)/$rowDiff;
 
         //2 кейса:
         //$qtyUpdate == 0 - то всем товарам увеличить цену, не разделяя.
@@ -526,7 +528,7 @@ class Discount
             return $final;
         }
 
-        $item2['price']    = $item2['price'] + 0.01 + $inc / 100;
+        $item2['price']    = $item2['price'] + $sign*0.01 + $inc / 100;
         $item2['quantity'] = $qtyUpdate;
         $item2['sum']      = round($item2['quantity'] * $item2['price'], 2);
 
