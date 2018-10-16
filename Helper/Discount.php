@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order\Invoice;
  */
 class Discount
 {
-    const VERSION         = '1.0.16';
+    const VERSION         = '1.0.17';
     const NAME_UNIT_PRICE = 'disc_hlpr_price';
     const NAME_ROW_DIFF   = 'recalc_row_diff';
 
