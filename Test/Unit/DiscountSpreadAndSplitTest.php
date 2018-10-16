@@ -1223,50 +1223,43 @@ class DiscountSpreadAndSplitTest extends DiscountGeneralTestCase
         $actualData[parent::TEST_CASE_NAME_20] = [
             'sum'            => 14671.6,
             'origGrandTotal' => 14671.6,
-            'items'          =>
-                [
-                    '100586_1' =>
-                        [
+            'items'          => [
+                    '100586_1' => [
                             'price'    => 1144.58,
                             'name'     => 'gDghRkvg',
                             'quantity' => 2,
                             'sum'      => 2289.16,
                             'tax'      => 'vat18',
                         ],
-                    '100586_2' =>
-                        [
+                    '100586_2' => [
                             'price'    => 1144.57,
                             'name'     => 'gDghRkvg',
                             'quantity' => 3,
                             'sum'      => 3433.71,
                             'tax'      => 'vat18',
                         ],
-                    '100587_1' =>
-                        [
+                    '100587_1' => [
                             'price'    => 2801.86,
                             'name'     => '9WgjLFHY',
                             'quantity' => 2,
                             'sum'      => 5603.72,
                             'tax'      => 'vat18',
                         ],
-                    '100587_2' =>
-                        [
+                    '100587_2' => [
                             'price'    => 2801.85,
                             'name'     => '9WgjLFHY',
                             'quantity' => 1,
                             'sum'      => 2801.85,
                             'tax'      => 'vat18',
                         ],
-                    0          =>
-                        [
+                    0          => [
                             'price'    => 543.16,
                             'name'     => '5b3e0rfX',
                             'quantity' => 1,
                             'sum'      => 543.16,
                             'tax'      => 'vat18',
                         ],
-                    'shipping' =>
-                        [
+                    'shipping' => [
                             'name'     => '',
                             'price'    => 0,
                             'quantity' => 1,
