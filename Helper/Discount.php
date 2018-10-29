@@ -311,6 +311,7 @@ class Discount
         $i     = abs($lostDiscount) * 100;
         $count = count($items);
         $iter  = 0;
+        reset($items);
         while ($i > 0) {
             $item = current($items);
 
@@ -393,7 +394,7 @@ class Discount
             }
 
             $splitedItems = $this->getProcessedItem($item);
-            $itemsFinal   = array_merge($itemsFinal, $splitedItems);
+            $itemsFinal   = $itemsFinal + $splitedItems;
         }
 
         //Calculate sum
