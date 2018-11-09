@@ -503,7 +503,7 @@ class Discount
         /** @var int $qtyUpdate Сколько товаров из ряда нуждаются в изменении цены
          *  Если $qtyUpdate =0 - то цена всех товаров должна быть увеличина
          */
-        $qtyUpdate = abs($rowDiff % $qty);
+        $qtyUpdate = abs(bcmod($rowDiff, $qty));
         $sign = abs($rowDiff)/$rowDiff;
 
         //2 кейса:
